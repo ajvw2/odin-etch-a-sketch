@@ -1,0 +1,186 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    /* Flexbox parental */
+    display: flex;
+    justify-content: center;
+
+    /* Dimensional */
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    /* Decorative */
+    background-color: #f9f4ef;
+}
+
+.body-wrapper {
+    /* Flexbox parental */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    /* Flexbox childlike */
+    flex: 1;
+
+    /* Dimensional */
+    height: 100vh;
+    max-width: 1300px;
+
+    /* Decorative */
+    border-left: 1px dotted #02082679;
+    border-right: 1px dotted #02082679;
+}
+
+.header,
+.footer {
+    /* Flexbox parent properties */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Dimensional */
+    padding: 10px;
+
+    /* Decorative */
+    border: 1px solid black;
+}
+
+.header .title {
+    /* Textual */
+    font-weight: 800;
+}
+
+.sketcher {
+    /* Flexbox parent properties */
+    display: flex;
+
+    flex-grow: 1;
+    
+
+    margin: 16px;
+    /* max-width: 1000px; */
+
+
+    border: 1px dotted #02082679;
+}
+
+.menu {
+    /* Flex childlike */
+    flex: 1;
+
+    /* Dimensional */
+    min-width: 200px;
+
+    /* Decorative */
+    border: 1px solid #020826;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+
+.screen-container {
+    /* Flexbox parental */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    /* Flex childlike */
+    flex: 4;
+
+    /* Dimensional */
+    max-width: 800px;
+
+
+    /* Decorative */
+    border: 1px solid #020826;
+    border-left: 0px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.screen {
+    /* Flex parental */
+    display: flex;
+    justify-content: center;
+    align-content: center;
+
+    /* Flex childlike */
+    flex: 4 1 300px;
+
+    /* Dimensional */
+    min-width: 300px;
+
+
+    /* Decorative */
+    border-bottom: 1px dotted #02082679;
+}
+
+.grid-wrapper {
+    display: flex;
+    justify-content: center;
+
+    /* Flex child */
+    flex: 1;
+    
+    /* Dimensional */
+    margin: 16px 16px;
+
+    /* Decorative */
+    border: 1px dotted #02082679;
+}
+
+.grid {
+    /* aspect-ratio: 1 / 1; */
+    flex: 1;
+    
+
+    /* Decorative */
+    border: 1px solid #020826;
+}
+
+.knobs {
+    /* Flex parental */
+    display: flex;
+    justify-content: space-between;
+
+    /* Flex child */
+    flex: 1 1 80px;
+    
+    /* Dimensional */
+    max-height: 100px;
+    margin: 16px 16px;
+    padding: 0px 10px;
+
+    /* Decorative */
+    border: 1px dotted #02082679;
+}
+
+.knob {
+    /* Flex childlike */
+    aspect-ratio: 1 / 1;
+
+    /* Decorative */
+    border: 1px dotted #02082679;
+    border-radius: 50%;
+}
+
+.footer .copyright {
+    /* Textual */
+    font-size: 14px;
+    font-weight: 200;
+}
+
+@media(max-width: 500px) {
+    .sketcher {
+        flex-wrap: wrap;
+        min-height: 200px;
+    }
+}
