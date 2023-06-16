@@ -21,8 +21,9 @@ function delay(ms) {
 }
 
 async function clearGrid() {
+    let shakeNumber = Math.floor(Math.random() * 2) + 1;
 
-    sketcher.classList.add('shake');
+    sketcher.classList.add(`shake${shakeNumber}`);
     for (let i = 0; i < gridSize ** 2; i++) {
         let selectedPixel = document.querySelector(`#pixel${i}`);
         selectedPixel.classList.add('erasure');
@@ -39,37 +40,28 @@ async function clearGrid() {
         pixel.classList.remove('erasure');
     })
 
-    sketcher.addEventListener('animationiteration', () => {
-        sketcher.classList.remove('shake');
-    });
-
     
+
+    sketcher.addEventListener('animationiteration', () => {
+        sketcher.classList.remove(`shake${shakeNumber}`);
+    });  
 }
 
+const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
 let gridSize = 16;
 setGrid();
-
-const sketcher = document.querySelector('.sketcher');
-
 const pixels = document.querySelectorAll('.pixel');
 
+
+// Drawing with mouse held down
 let mouseIsDown = false;
 window.onmousedown = () => {
     mouseIsDown = true;
 }
-// window.ontouchstart = () => {
-//     mouseIsDown = true;
-// }
-
 window.onmouseup = () => {
     mouseIsDown = false;
 }
-
-// window.ontouchend = () => {
-//     mouseIsDown = false;
-// }
-
 
 pixels.forEach((pixel) => {
     pixel.addEventListener('mouseover', () => {
@@ -79,14 +71,12 @@ pixels.forEach((pixel) => {
             pixel.addEventListener('mousedown', () => {
                 pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
             });
-            // pixel.addEventListener('touchstart', () => {
-            //     pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
-            // })
         }
     })
 })
 
 
+// Drawing on touchscreen
 grid.addEventListener('touchmove', function(e) {
     // Credit to: https://gist.github.com/VehpuS/6fd5dca2ea8cd0eb0471
     let touch = e.touches[0];
@@ -95,8 +85,8 @@ grid.addEventListener('touchmove', function(e) {
 });
 
 
+// Clear grid button
 clearButton = document.querySelector("#clear");
-
 clearButton.addEventListener('click', () => {
     clearGrid();
 })
