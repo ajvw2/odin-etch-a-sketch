@@ -27,8 +27,11 @@ html {
 body {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: 0;
     padding: 0;
+
+    height: 100vh;
 }
 
 .sketcher-wrapper {
@@ -36,6 +39,7 @@ body {
     justify-content: center;
     flex: 1;
     max-width: 1300px;
+
 }
 
 .sketcher {
@@ -54,19 +58,49 @@ body {
 }
 
 .shake {
-    animation-name: shake-the-sketcher;
-    animation-duration: 0.75s;
-    animation-timing-function: ease;
+    animation-name: shake-the-sketcher2;
+    animation-duration: 2s;
+    animation-timing-function: ease-out;
     animation-iteration-count: infinite;
 }
 
+@keyframes shake-the-sketcher2 {
+    /* Duration, 2s per loop */
+    0% { 
+        transform: perspective(none) rotateX(0deg);
+        filter: blur(0px);
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    }
+    7% { 
+        transform: perspective(75em) rotateX(45deg) scale(0.8) translateY(50px);
+        filter: blur(2px);
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset, rgba(0, 0, 0, 0.493) 0px -40px 40px -30px;
+    }
+    40% { 
+        transform: perspective(none) rotateX(0deg) scale(1) translateY(0px);
+        filter: blur(0px);
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    }
+    49% { 
+        transform: perspective(75em) rotateX(45deg) scale(0.8) translateY(50px);
+        filter: blur(2px); 
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset, rgba(0, 0, 0, 0.493) 0px -40px 40px -30px;
+    }
+    80% { 
+        transform: perspective(none) rotateX(0deg) scale(1);
+        filter: blur(0px);
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; 
+    }
+}
+
 @keyframes shake-the-sketcher {
+    /* Duration: 0.75s per loop */
     0% { transform: translateX(0); filter: blur(0px); }
     25% { transform: translateY(-9px); filter: blur(0px); }
-    35% { transform: translateY(-9px) rotate(12deg); filter: blur(2px); }
-    55% { transform: translateY(-9px) rotate(-12deg); filter: blur(4px); }
-    65% { transform: translateY(-9px) rotate(12deg); filter: blur(2px); }
-    75% { transform: translateY(-9px) rotate(-12deg); filter: blur(0px); }
+    35% { transform: translateY(-9px) rotate(12deg); filter: blur(0px); }
+    55% { transform: translateY(-9px) rotate(-12deg); filter: blur(2px); }
+    65% { transform: translateY(-9px) rotate(12deg); filter: blur(0px); }
+    75% { transform: translateY(-9px) rotate(-12deg); filter: blur(2px); }
     100% { transform: translateY(0) rotate(0); filter: blur(0px); }
   }
 
