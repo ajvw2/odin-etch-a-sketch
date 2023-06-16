@@ -75,7 +75,7 @@ body {
     align-items: center;
     justify-content: center;
     flex: 1;
-    font-size: 100px;
+    font-size: 40px;
     color: rgba(0, 92, 134, 0.623);
     /* border: 1px dashed rgba(0, 0, 0, 0.336); */
     
@@ -120,7 +120,7 @@ body {
 }
 
 #clear {
-    padding: 10px;
+    padding: 5px;
     font-size: 20px;
     font-weight: 800;
 }
@@ -251,6 +251,11 @@ body {
         width: 530px;
         height: 530px;
     }
+
+    .knob {
+        height: 90px;
+        width: 90px;
+    }
 }
 
 @media(max-width: 600px) {
@@ -298,11 +303,6 @@ body {
     .pixel-grid {
         width: 300px;
         height: 300px;
-    }
-
-    .knob {
-        height: 90px;
-        width: 90px;
     }
 }
 
