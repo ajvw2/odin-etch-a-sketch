@@ -54,17 +54,17 @@ let mouseIsDown = false;
 window.onmousedown = () => {
     mouseIsDown = true;
 }
-window.ontouchstart = () => {
-    mouseIsDown = true;
-}
+// window.ontouchstart = () => {
+//     mouseIsDown = true;
+// }
 
 window.onmouseup = () => {
     mouseIsDown = false;
 }
 
-window.ontouchend = () => {
-    mouseIsDown = true;
-}
+// window.ontouchend = () => {
+//     mouseIsDown = false;
+// }
 
 
 pixels.forEach((pixel) => {
@@ -74,13 +74,22 @@ pixels.forEach((pixel) => {
         } else {
             pixel.addEventListener('mousedown', () => {
                 pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
-            })
-            pixel.addEventListener('touchstart', () => {
-                pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
-            })
+            });
+            // pixel.addEventListener('touchstart', () => {
+            //     pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
+            // })
         }
     })
 })
+
+
+grid.addEventListener('touchmove', function(e) {
+    // Credit to: https://gist.github.com/VehpuS/6fd5dca2ea8cd0eb0471
+    let touch = e.touches[0];
+    const pixel = document.elementFromPoint(touch.clientX, touch.clientY);
+    pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
+});
+
 
 clearButton = document.querySelector("#clear");
 
