@@ -11,14 +11,20 @@
     <div class="sketcher-wrapper">
         <div class="sketcher selectDisable">
             <div class="panel controls">
-                <div class="control-box" id="cb1">c+rb</div>
+                <div class="control-box" id="cb1">
+                    <input type="color" id="colorpicker" value="#000000">
+                    <label class="switch">
+                        <input type="checkbox" id="rainbow-switch-checkbox">
+                        <span class="toggler"></span>
+                    </label>
+                </div>
                 <div class="control-box" id="cb2">fll+ers</div>
                 <div class="control-box" id="cb3">l+drk</div>
                 <div class="control-box" id="cb4">
                     <div class="slider-container">
                         <input type="range" min="4" max="100" value="15" class="slider" id="grid-size-slider">
                     </div>
-                    <label class="grid-switch">
+                    <label class="switch">
                         <input type="checkbox" id="grid-switch-checkbox" checked>
                         <span class="toggler"></span>
                     </label>

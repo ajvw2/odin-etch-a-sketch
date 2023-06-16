@@ -19,10 +19,10 @@ function makeGrid() {
 
 async function clearGrid() {
     // Select random shaking animation
-    // let shakeNumber = Math.floor(Math.random() * 2) + 1;
-    // sketcher.classList.add(`shake${shakeNumber}`);
+    let shakeNumber = Math.floor(Math.random() * 2) + 1;
+    sketcher.classList.add(`shake${shakeNumber}`);
     // Prevent appearance of scroll bars during animation
-    // body.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
     
     let pixelAmount = gridSize ** 2;
 
@@ -48,11 +48,11 @@ async function clearGrid() {
         pixel.classList.remove('erasure');
     })
 
-    // sketcher.addEventListener('animationiteration', () => {
-    //     sketcher.classList.remove(`shake${shakeNumber}`);
-    // });
-    //await delay(1200);
-    // body.style.overflow = 'visible';
+    sketcher.addEventListener('animationiteration', () => {
+        sketcher.classList.remove(`shake${shakeNumber}`);
+    });
+    await delay(1200);
+    body.style.overflow = 'visible';
 }
 
 function freeGrid() {
@@ -96,10 +96,10 @@ function drawMouse() {
             // Color on mouseover if mouse is down, else only 
             // color on mousedown
             if (mouseIsDown) {
-                pixel.style.backgroundColor = selectedColor;
+                pixel.style.backgroundColor = rainbowMode? getColor() : selectedColor;
             } else {
                 pixel.addEventListener('mousedown', () => {
-                    pixel.style.backgroundColor = selectedColor;
+                    pixel.style.backgroundColor = rainbowMode? getColor() : selectedColor;
                 });
             }
         });
@@ -111,8 +111,25 @@ function drawTouch() {
         // Credit to: https://gist.github.com/VehpuS/6fd5dca2ea8cd0eb0471
         let touch = e.touches[0];
         let pixel = document.elementFromPoint(touch.clientX, touch.clientY);
-        pixel.style.backgroundColor = selectedColor;
+        pixel.style.backgroundColor = rainbowMode ? getColor() : selectedColor;
     });
+}
+
+function getColor() {
+    let r, g, b;
+    let color = colorPicker.value;
+    
+    if (rainbowMode) {
+        r = Math.floor(Math.random() * 256);
+        g = Math.floor(Math.random() * 256);
+        b = Math.floor(Math.random() * 256);
+    } else {
+        r = parseInt(color.substr(1,2), 16);
+        g = parseInt(color.substr(3,2), 16);
+        b = parseInt(color.substr(5,2), 16);
+    }
+    
+    return `rgba(${r}, ${g}, ${b}, 0.700)`;
 }
 
 function delay(ms) {
@@ -124,13 +141,17 @@ const body = document.querySelector('body');
 const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
 
+
+// Control box 1 elements
+const rainbowToggler = document.querySelector('#rainbow-switch-checkbox');
+let rainbowMode = false;
+const colorPicker = document.querySelector('#colorpicker');
+let selectedColor = getColor();
+
 // Control box 4 elements
 const gridSizeSlider = document.querySelector('#grid-size-slider');
 const gridToggler = document.querySelector('#grid-switch-checkbox');
 const clearButton = document.querySelector("#clear");
-
-
-let selectedColor = 'rgba(0, 0, 0, 0.700)';
 
 // Get initial grid size from slider and make the grid
 let gridSize = gridSizeSlider.value;
@@ -143,13 +164,20 @@ updateGridLines();
 drawMouse();
 drawTouch();
 
-// Grid size slider
+// Control box 1 event listeners
+colorPicker.addEventListener('change', () => {
+    selectedColor = getColor();
+})
+rainbowToggler.addEventListener('change', () => {
+    rainbowMode = !rainbowMode;
+    if (!rainbowMode) {
+        selectedColor = getColor();
+    }
+})
+
+// Control box 4 event listeners
 gridSizeSlider.addEventListener('change', updateGrid);
-
-// Clear grid button
 clearButton.addEventListener('click', clearGrid);
-
-// Grid display switch
 gridToggler.addEventListener('change', updateGridLines);
 
 
