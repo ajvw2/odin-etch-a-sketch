@@ -21,6 +21,10 @@ function delay(ms) {
 }
 
 async function clearGrid() {
+    // Setting overflow to hidden during animation lets the sketcher
+    // clip when it goes offscreen without scroll bars appearing
+    body.style.overflow = 'hidden';
+
     let shakeNumber = Math.floor(Math.random() * 2) + 1;
 
     sketcher.classList.add(`shake${shakeNumber}`);
@@ -44,9 +48,13 @@ async function clearGrid() {
 
     sketcher.addEventListener('animationiteration', () => {
         sketcher.classList.remove(`shake${shakeNumber}`);
-    });  
+    });
+
+    await delay(1000);
+    body.style.overflow = 'visible';
 }
 
+const body = document.querySelector('body');
 const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
 let gridSize = 16;
