@@ -3,31 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-a-Sketch</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
-    <title>Etch-a-Sketch</title>
 </head>
 <body>
-    <div class="body-wrapper">
-        <div class="header">
-            <div class="title">Etch-a-Sketch</div>
-        </div>
+    <div class="sketcher-wrapper">
         <div class="sketcher">
-            <div class="menu"></div>
-            <div class="screen-container">
-                <div class="screen">
-                    <div class="grid-wrapper">
-                        <div class="grid"></div>
-                    </div>
+            <div class="panel controls">
+                <div class="control-box">1a</div>
+                <div class="control-box">1b</div>
+                <div class="control-box">1c</div>
+                <div class="control-box"><button id="clear">Clear Grid</button></div>
+            </div>
+            <div class="panel screen selectDisable">
+                <div class="screen-box display">
+                    <div class="pixel-grid"></div>
                 </div>
-                <div class="knobs">
+                <div class="screen-box knobs">
                     <div class="knob vertical"></div>
                     <div class="knob horizontal"></div>
                 </div>
             </div>
-        </div>
-        <div class="footer">
-            <div class="copyright">ajvw2</div>
         </div>
     </div>
 </body>

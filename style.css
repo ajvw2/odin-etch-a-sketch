@@ -1,3 +1,19 @@
+.selectDisable {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.selectEnable { 
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -o-user-select: text;
+    user-select: text;
+}
+
 html {
     box-sizing: border-box;
 }
@@ -9,178 +25,289 @@ html {
 }
 
 body {
-    /* Flexbox parental */
     display: flex;
     justify-content: center;
-
-    /* Dimensional */
-    height: 100vh;
     margin: 0;
     padding: 0;
-
-    /* Decorative */
-    background-color: #f9f4ef;
 }
 
-.body-wrapper {
-    /* Flexbox parental */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    /* Flexbox childlike */
-    flex: 1;
-
-    /* Dimensional */
-    height: 100vh;
-    max-width: 1300px;
-
-    /* Decorative */
-    border-left: 1px dotted #02082679;
-    border-right: 1px dotted #02082679;
-}
-
-.header,
-.footer {
-    /* Flexbox parent properties */
+.sketcher-wrapper {
     display: flex;
     justify-content: center;
-    align-items: center;
-
-    /* Dimensional */
-    padding: 10px;
-
-    /* Decorative */
-    border: 1px solid black;
-}
-
-.header .title {
-    /* Textual */
-    font-weight: 800;
+    flex: 1;
+    max-width: 1300px;
 }
 
 .sketcher {
-    /* Flexbox parent properties */
-    display: flex;
-
-    flex-grow: 1;
-    
-
-    margin: 16px;
-    /* max-width: 1000px; */
-
-
-    border: 1px dotted #02082679;
-}
-
-.menu {
-    /* Flex childlike */
     flex: 1;
-
-    /* Dimensional */
-    min-width: 200px;
-
-    /* Decorative */
-    border: 1px solid #020826;
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    background-color: white;
+    padding: 32px;
+    gap: 0px;
+    border: 2px solid rgba(63, 25, 0, 0.575);
+    border-radius: 32px;
+    background-color: rgb(199, 26, 26);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    transition: all 0.1s ease;
 }
 
-.screen-container {
-    /* Flexbox parental */
+.shake {
+    animation-name: shake-the-sketcher;
+    animation-duration: 0.75s;
+    animation-timing-function: ease;
+    animation-iteration-count: infinite;
+}
+
+@keyframes shake-the-sketcher {
+    0% { transform: translateX(0) }
+    25% { transform: translateY(-9px) }
+    35% { transform: translateY(-9px) rotate(12deg) }
+    55% { transform: translateY(-9px) rotate(-12deg) }
+    65% { transform: translateY(-9px) rotate(12deg) }
+    75% { transform: translateY(-9px) rotate(-12deg) }
+    100% { transform: translateY(0) rotate(0) }
+  }
+
+.panel {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    font-size: 100px;
+    color: rgba(0, 92, 134, 0.623);
+    /* border: 1px dashed rgba(0, 0, 0, 0.336); */
+    
+}
+
+.panel.controls {
+    flex: 1;
     flex-direction: column;
+    align-items: stretch;
+    min-width: 250px;
+}
+
+.panel.screen {
+    flex: 3;
+    display: flex;
+    align-items: stretch;
+    min-width: 350px;
+    min-height: 700px;
+}
+
+.control-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    
-    /* Flex childlike */
+}
+
+.screen-box {
     flex: 4;
-
-    /* Dimensional */
-    max-width: 800px;
-
-
-    /* Decorative */
-    border: 1px solid #020826;
-    border-left: 0px;
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-}
-
-.screen {
-    /* Flex parental */
     display: flex;
+    align-items: center;
     justify-content: center;
-    align-content: center;
-
-    /* Flex childlike */
-    flex: 4 1 300px;
-
-    /* Dimensional */
-    min-width: 300px;
-
-
-    /* Decorative */
-    border-bottom: 1px dotted #02082679;
+    padding: 0px;
+    /* border: 1px dashed rgba(0, 0, 0, 0.336); */
 }
 
-.grid-wrapper {
-    display: flex;
-    justify-content: center;
-
-    /* Flex child */
+.screen-box.knobs {
     flex: 1;
-    
-    /* Dimensional */
-    margin: 16px 16px;
-
-    /* Decorative */
-    border: 1px dotted #02082679;
-}
-
-.grid {
-    /* aspect-ratio: 1 / 1; */
-    flex: 1;
-    
-
-    /* Decorative */
-    border: 1px solid #020826;
-}
-
-.knobs {
-    /* Flex parental */
-    display: flex;
+    flex-direction: column;
     justify-content: space-between;
+    padding: 20px 0px;
+}
 
-    /* Flex child */
-    flex: 1 1 80px;
+#clear {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.pixel-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    border: 4px solid rgba(54, 0, 0, 0.651);
+    align-self: center;
+    width: 680px;
+    height: 680px;
+
+    background: linear-gradient(217deg, rgba(253, 253, 253, 0.8), rgba(206, 206, 206, 0.356) 70.71%),            
+                linear-gradient(127deg, rgba(192, 197, 192, 0.8), rgba(248, 248, 248, 0.452) 70.71%),            
+                linear-gradient(336deg, rgba(99, 99, 99, 0.8), rgba(124, 124, 124, 0.349) 70.71%);
+
+    box-shadow: rgba(50, 50, 93, 0.25) 50px 0px 100px -20px inset, rgba(0, 0, 0, 0.3) 30px 0px 60px -30px inset;
     
-    /* Dimensional */
-    max-height: 100px;
-    margin: 16px 16px;
-    padding: 0px 10px;
+}
 
-    /* Decorative */
-    border: 1px dotted #02082679;
+.pixel {
+    border-bottom: 1px dashed rgba(128, 128, 128, 0.568);
+    border-right: 1px dashed rgba(128, 128, 128, 0.534);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.05s ease;
+}
+
+.pixel:hover {
+    background: radial-gradient(#00000081, #00000000, #00000000, #00000000, #00000000);
+}
+
+.pixel.erasure {
+    transition: all 0.2s ease;
 }
 
 .knob {
-    /* Flex childlike */
-    aspect-ratio: 1 / 1;
-
-    /* Decorative */
-    border: 1px dotted #02082679;
+    font-size: 30px;
     border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.651);
+    background: radial-gradient(#eceff4, #dfdcda, #cfc6c6, #eceff4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 120px;
+
+    box-shadow: -5px -5px 9px rgba(255,255,255,0.45), 5px 5px 9px rgba(94,104,121,0.3);
+             
 }
 
-.footer .copyright {
-    /* Textual */
-    font-size: 14px;
-    font-weight: 200;
+@media(max-width: 1220px) {
+    .pixel-grid {
+        width: 630px;
+        height: 630px;
+    }
+}
+
+@media(max-width: 1180px) {
+    .pixel-grid {
+        width: 580px;
+        height: 580px;
+    }
+}
+
+@media(max-width: 1050px) {
+    .panel.screen {
+        flex-direction: column;
+        min-height: 700px;
+    }
+    
+    .screen-box.knobs {
+        flex-direction: row;
+        padding: 0px 20px;
+    }
+
+    .pixel-grid {
+        width: 530px;
+        height: 530px;
+    }
+}
+
+@media(max-width: 890px) {
+    .pixel-grid {
+        width: 480px;
+        height: 480px;
+    }
+}
+
+@media(max-width: 810px) {
+    .pixel-grid {
+        width: 430px;
+        height: 430px;
+    }
+}
+
+@media(max-width: 755px) {
+    .pixel-grid {
+        width: 380px;
+        height: 380px;
+    }
+}
+
+@media(max-width: 705px) {
+    .pixel-grid {
+        width: 330px;
+        height: 330px;
+    }
+}
+
+@media(max-width: 666px) {
+    .panel.controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .control-box {
+        min-width: 200px;
+    }
+
+    .pixel-grid {
+        width: 530px;
+        height: 530px;
+    }
+}
+
+@media(max-width: 600px) {
+    .pixel-grid {
+        width: 480px;
+        height: 480px;
+    }
+}
+
+@media(max-width: 550px) {
+    .sketcher {
+        padding: 0;
+    }
+    
+
+    .pixel-grid {
+        width: 430px;
+        height: 430px;
+    }
 }
 
 @media(max-width: 500px) {
-    .sketcher {
-        flex-wrap: wrap;
-        min-height: 200px;
+    .pixel-grid {
+        width: 380px;
+        height: 380px;
+    }
+}
+
+@media(max-width: 450px) {
+    
+    .panel.screen {
+        flex-direction: column;
+        min-height: 500px;
+        min-width: 250px;
+        padding: 0;
+    }
+    
+    .pixel-grid {
+        width: 330px;
+        height: 330px;
+    }
+}
+
+@media(max-width: 370px) {
+    .pixel-grid {
+        width: 300px;
+        height: 300px;
+    }
+
+    .knob {
+        height: 90px;
+        width: 90px;
+    }
+}
+
+@media(max-width: 315px) {
+    .pixel-grid {
+        width: 250px;
+        height: 250px;
     }
 }
