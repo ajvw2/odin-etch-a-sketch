@@ -70,15 +70,6 @@ let gridSize = gridSizeSlider.value;
 
 setGrid();
 let pixels = document.querySelectorAll('.pixel');
-
-gridSizeSlider.addEventListener('change', () => {
-    freeGrid();
-    gridSize = gridSizeSlider.value;
-    setGrid();
-    pixels = document.querySelectorAll('.pixel');
-});
-
-
 // Drawing with mouse held down
 let mouseIsDown = false;
 window.onmousedown = () => {
@@ -98,7 +89,32 @@ pixels.forEach((pixel) => {
             });
         }
     })
-})
+});
+
+
+
+gridSizeSlider.addEventListener('change', () => {
+    freeGrid();
+    gridSize = gridSizeSlider.value;
+    setGrid();
+    pixels = document.querySelectorAll('.pixel');
+    pixels.forEach((pixel) => {
+        pixel.addEventListener('mouseover', () => {
+            if (mouseIsDown) {
+                pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
+            } else {
+                pixel.addEventListener('mousedown', () => {
+                    pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
+                });
+            }
+        })
+    });
+});
+
+
+
+
+
 
 
 // Drawing on touchscreen
@@ -115,6 +131,39 @@ clearButton = document.querySelector("#clear");
 clearButton.addEventListener('click', () => {
     clearGrid();
 })
+
+// Grid display switch
+const gridToggler = document.querySelector('#grid-switch-checkbox');
+gridToggler.addEventListener('change', () => {
+    if (gridToggler.checked) {
+        console.log('Show grid');
+        pixels.forEach((pixel) => {
+            
+            pixel.style.borderRadius = '2px';
+
+            let pixelNumber = pixel.id.match(/\d/g).join("");
+            if (pixelNumber % gridSize === gridSize - 1)
+            {
+                pixel.style.borderRight = '0px';
+            } else {
+                pixel.style.borderRight = '1px dashed rgba(128, 128, 128, 0.568)';
+            }
+            if (pixelNumber > gridSize * (gridSize - 1) - 1) {
+                pixel.style.borderBottom = '0px';
+            } else {
+                pixel.style.borderBottom = '1px dashed rgba(128, 128, 128, 0.568)';
+            }
+        })
+    }
+    else {
+        console.log('Don\'t show grid');
+        pixels.forEach((pixel) => {
+            pixel.style.border = '0';
+            pixel.style.borderRadius = '0';
+
+        })
+    }
+});
 
 
 
