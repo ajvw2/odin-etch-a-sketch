@@ -54,9 +54,18 @@ let mouseIsDown = false;
 window.onmousedown = () => {
     mouseIsDown = true;
 }
+window.ontouchstart = () => {
+    mouseIsDown = true;
+}
+
 window.onmouseup = () => {
     mouseIsDown = false;
 }
+
+window.ontouchend = () => {
+    mouseIsDown = true;
+}
+
 
 pixels.forEach((pixel) => {
     pixel.addEventListener('mouseover', () => {
@@ -64,6 +73,9 @@ pixels.forEach((pixel) => {
             pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
         } else {
             pixel.addEventListener('mousedown', () => {
+                pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
+            })
+            pixel.addEventListener('touchstart', () => {
                 pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
             })
         }

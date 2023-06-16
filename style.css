@@ -126,6 +126,7 @@ body {
 }
 
 .pixel-grid {
+    touch-action: none;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
