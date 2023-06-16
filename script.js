@@ -27,7 +27,7 @@ async function clearGrid() {
 
     let shakeNumber = Math.floor(Math.random() * 2) + 1;
 
-    sketcher.classList.add(`shake${shakeNumber}`);
+    // sketcher.classList.add(`shake${shakeNumber}`);
     for (let i = 0; i < gridSize ** 2; i++) {
         let selectedPixel = document.querySelector(`#pixel${i}`);
         selectedPixel.classList.add('erasure');
@@ -35,7 +35,7 @@ async function clearGrid() {
         
         if (i % gridSize === 0) {
             selectedPixel.innerHTML = "&nbsp;";
-            await delay(50);
+            await delay(750/gridSize);
             selectedPixel.innerHTML = "";
         }
     }
@@ -46,20 +46,37 @@ async function clearGrid() {
 
     
 
-    sketcher.addEventListener('animationiteration', () => {
-        sketcher.classList.remove(`shake${shakeNumber}`);
-    });
+    // sketcher.addEventListener('animationiteration', () => {
+    //     sketcher.classList.remove(`shake${shakeNumber}`);
+    // });
 
-    await delay(1000);
+    await delay(1200);
     body.style.overflow = 'visible';
+}
+
+function freeGrid() {
+    pixels.forEach((pixel) => {
+        grid.removeChild(pixel);
+    })
 }
 
 const body = document.querySelector('body');
 const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
-let gridSize = 16;
+
+// Grid size slider
+const gridSizeSlider = document.querySelector('#grid-size-slider');
+let gridSize = gridSizeSlider.value;
+
 setGrid();
-const pixels = document.querySelectorAll('.pixel');
+let pixels = document.querySelectorAll('.pixel');
+
+gridSizeSlider.addEventListener('change', () => {
+    freeGrid();
+    gridSize = gridSizeSlider.value;
+    setGrid();
+    pixels = document.querySelectorAll('.pixel');
+});
 
 
 // Drawing with mouse held down
@@ -88,7 +105,7 @@ pixels.forEach((pixel) => {
 grid.addEventListener('touchmove', function(e) {
     // Credit to: https://gist.github.com/VehpuS/6fd5dca2ea8cd0eb0471
     let touch = e.touches[0];
-    const pixel = document.elementFromPoint(touch.clientX, touch.clientY);
+    let pixel = document.elementFromPoint(touch.clientX, touch.clientY);
     pixel.style.backgroundColor = 'rgba(0, 0, 0, 0.700)';
 });
 

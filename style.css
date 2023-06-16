@@ -148,6 +148,10 @@ body {
     justify-content: center;
 }
 
+#cb4 {
+    flex-direction: column;
+}
+
 .screen-box {
     flex: 4;
     display: flex;
