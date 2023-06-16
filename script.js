@@ -39,7 +39,11 @@ async function clearGrid() {
         pixel.classList.remove('erasure');
     })
 
-    sketcher.classList.remove('shake');
+    sketcher.addEventListener('animationiteration', () => {
+        sketcher.classList.remove('shake');
+    });
+
+    
 }
 
 const grid = document.querySelector('.pixel-grid');
