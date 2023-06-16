@@ -61,13 +61,13 @@ body {
 }
 
 @keyframes shake-the-sketcher {
-    0% { transform: translateX(0) }
-    25% { transform: translateY(-9px) }
-    35% { transform: translateY(-9px) rotate(12deg) }
-    55% { transform: translateY(-9px) rotate(-12deg) }
-    65% { transform: translateY(-9px) rotate(12deg) }
-    75% { transform: translateY(-9px) rotate(-12deg) }
-    100% { transform: translateY(0) rotate(0) }
+    0% { transform: translateX(0); filter: blur(0px); }
+    25% { transform: translateY(-9px); filter: blur(0px); }
+    35% { transform: translateY(-9px) rotate(12deg); filter: blur(2px); }
+    55% { transform: translateY(-9px) rotate(-12deg); filter: blur(4px); }
+    65% { transform: translateY(-9px) rotate(12deg); filter: blur(2px); }
+    75% { transform: translateY(-9px) rotate(-12deg); filter: blur(0px); }
+    100% { transform: translateY(0) rotate(0); filter: blur(0px); }
   }
 
 .panel {
