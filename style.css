@@ -256,17 +256,17 @@ input:checked + .toggler:before {
     transition: all 0.05s ease;
 }
 
-.pixel.grid-lines-on {
+.grid-lines-on > .pixel {
     border-bottom: 1px dashed rgba(128, 128, 128, 0.568);
     border-right: 1px dashed rgba(128, 128, 128, 0.568);
     border-radius: 2px;
 }
 
-.pixel.grid-lines-on.last-column {
+.grid-lines-on > .pixel.last-column {
     border-right: 0;
 }
 
-.pixel.grid-lines-on.last-row {
+.grid-lines-on > .pixel.last-row {
     border-bottom: 0;
 }
 
@@ -274,7 +274,7 @@ input:checked + .toggler:before {
     background: radial-gradient(#00000081, #00000000, #00000000, #00000000, #00000000);
 }
 
-.pixel.erasure {
+.erasure > .pixel {
     transition: all 0.2s ease;
 }
 

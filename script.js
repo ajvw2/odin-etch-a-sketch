@@ -1,20 +1,26 @@
 function makeGrid() {
+    gridSize = gridSizeSlider.value;
     let pixelAmount = gridSize ** 2;
     let widthPercentage = 100 / gridSize;
-    
+    let allPixels = document.createDocumentFragment();
+
     for (let i = 0; i < pixelAmount; i++) {
         let newPixel = document.createElement('div');
         newPixel.classList.add('pixel');
 
         let onLastColumn = (i % gridSize) === (gridSize - 1);
-        let onLastRow = i > (gridSize * (gridSize - 1) - 1);
-        if (onLastColumn) { newPixel.classList.add('last-column'); }
-        if (onLastRow) { newPixel.classList.add('last-row'); }
+        if (onLastColumn) newPixel.classList.add('last-column');
 
+        let onLastRow = i > (gridSize * (gridSize - 1) - 1);
+        if (onLastRow) newPixel.classList.add('last-row');
         newPixel.setAttribute('id', `pixel${i}`);
+
         newPixel.style.flex = `1 0 ${widthPercentage}%`;
-        grid.appendChild(newPixel);
+        allPixels.append(newPixel);
     }
+
+    grid.replaceChildren(allPixels);
+    updateGridLines();
 }
 
 async function clearGrid() {
@@ -25,6 +31,7 @@ async function clearGrid() {
     // body.style.overflow = 'hidden';
     
     let pixelAmount = gridSize ** 2;
+    grid.classList.add('erasure');
 
     for (let i = 0; i < pixelAmount; i++) {
         let selectedPixel = document.querySelector(`#pixel${i}`);
@@ -38,15 +45,13 @@ async function clearGrid() {
         // Create sweeping animation while clearing
         if (i % gridSize === 0) {
             // selectedPixel.innerHTML = "&nbsp;";
-            let delayTime = Math.max((750 / gridSize), 15);
+            let delayTime = Math.floor(750 / gridSize);
             await delay(delayTime);
             // selectedPixel.innerHTML = "";
         }
     }
 
-    pixels.forEach((pixel) => {
-        pixel.classList.remove('erasure');
-    })
+    grid.classList.remove('erasure');
 
     // sketcher.addEventListener('animationiteration', () => {
     //     sketcher.classList.remove(`shake${shakeNumber}`);
@@ -55,30 +60,12 @@ async function clearGrid() {
     // body.style.overflow = 'visible';
 }
 
-function freeGrid() {
-    pixels.forEach((pixel) => {
-        grid.removeChild(pixel);
-    })
-}
-
-function updateGrid() {
-    freeGrid();
-    gridSize = gridSizeSlider.value;
-    makeGrid();
-    pixels = document.querySelectorAll('.pixel');
-    updateGridLines();
-}
-
 function addGridLines() {
-    pixels.forEach((pixel) => {
-        pixel.classList.add('grid-lines-on');
-    });
+    grid.classList.add('grid-lines-on');
 }
 
 function removeGridLines() {
-    pixels.forEach((pixel) => {
-        pixel.classList.remove('grid-lines-on');
-    });  
+    grid.classList.remove('grid-lines-on'); 
 }
 
 function updateGridLines() {
@@ -152,11 +139,8 @@ const gridToggler = document.querySelector('#grid-switch-checkbox');
 const clearButton = document.querySelector("#clear");
 
 // Get initial grid size from slider and make the grid
-let gridSize = gridSizeSlider.value;
+let gridSize;
 makeGrid();
-// Select pixels created by makeGrid()
-let pixels = document.querySelectorAll('.pixel');
-updateGridLines();
 
 // Listen for drawing events
 draw();
@@ -167,7 +151,7 @@ rainbowToggler.addEventListener('change', () => {
 })
 
 // Control box 4 event listeners
-gridSizeSlider.addEventListener('change', updateGrid);
+gridSizeSlider.addEventListener('change', makeGrid);
 clearButton.addEventListener('click', clearGrid);
 gridToggler.addEventListener('change', updateGridLines);
 
