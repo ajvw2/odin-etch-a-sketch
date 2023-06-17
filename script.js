@@ -1,4 +1,4 @@
-function makeGrid() {
+async function makeGrid() {
     gridSize = gridSizeSlider.value;
     let pixelAmount = gridSize ** 2;
     let widthPercentage = 100 / gridSize;
@@ -19,6 +19,7 @@ function makeGrid() {
         allPixels.append(newPixel);
     }
 
+
     grid.replaceChildren(allPixels);
     updateGridLines();
 }
@@ -31,13 +32,10 @@ async function clearGrid() {
     // body.style.overflow = 'hidden';
     
     let pixelAmount = gridSize ** 2;
-    grid.classList.add('erasure');
+    grid.classList.add('clearing');
 
     for (let i = 0; i < pixelAmount; i++) {
         let selectedPixel = document.querySelector(`#pixel${i}`);
-
-        // Class '.erasure' increases transition time
-        selectedPixel.classList.add('erasure');
 
         // Remove (background) color from pixel
         selectedPixel.style.backgroundColor = 'transparent';
@@ -51,7 +49,7 @@ async function clearGrid() {
         }
     }
 
-    grid.classList.remove('erasure');
+    grid.classList.remove('clearing');
 
     // sketcher.addEventListener('animationiteration', () => {
     //     sketcher.classList.remove(`shake${shakeNumber}`);
@@ -60,16 +58,10 @@ async function clearGrid() {
     // body.style.overflow = 'visible';
 }
 
-function addGridLines() {
-    grid.classList.add('grid-lines-on');
-}
-
-function removeGridLines() {
-    grid.classList.remove('grid-lines-on'); 
-}
-
 function updateGridLines() {
-    gridToggler.checked ? addGridLines() : removeGridLines();
+    gridToggler.checked ? 
+        grid.classList.add('grid-lines-on') : 
+        grid.classList.remove('grid-lines-on');
 }
 
 function draw() {
@@ -89,12 +81,6 @@ function draw() {
         if (mouseIsDown) setPixelColor(e.clientX, e.clientY);
     });
 }
-
-// function drawTouch() {
-//     grid.addEventListener('touchmove', function(e) {
-//         setPixelColor(e.touches[0].clientX, e.touches[0].clientY);
-//     });
-// }
 
 function setPixelColor(x, y) {
     let currentPixel = document.elementFromPoint(x, y);
