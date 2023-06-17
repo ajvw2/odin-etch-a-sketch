@@ -18,11 +18,11 @@ function makeGrid() {
 }
 
 async function clearGrid() {
-    // Select random shaking animation
-    let shakeNumber = Math.floor(Math.random() * 2) + 1;
-    sketcher.classList.add(`shake${shakeNumber}`);
-    // Prevent appearance of scroll bars during animation
-    body.style.overflow = 'hidden';
+    // // Select random shaking animation
+    // let shakeNumber = Math.floor(Math.random() * 2) + 1;
+    // sketcher.classList.add(`shake${shakeNumber}`);
+    // // Prevent appearance of scroll bars during animation
+    // body.style.overflow = 'hidden';
     
     let pixelAmount = gridSize ** 2;
 
@@ -48,11 +48,11 @@ async function clearGrid() {
         pixel.classList.remove('erasure');
     })
 
-    sketcher.addEventListener('animationiteration', () => {
-        sketcher.classList.remove(`shake${shakeNumber}`);
-    });
-    await delay(1200);
-    body.style.overflow = 'visible';
+    // sketcher.addEventListener('animationiteration', () => {
+    //     sketcher.classList.remove(`shake${shakeNumber}`);
+    // });
+    // await delay(1200);
+    // body.style.overflow = 'visible';
 }
 
 function freeGrid() {
@@ -67,7 +67,6 @@ function updateGrid() {
     makeGrid();
     pixels = document.querySelectorAll('.pixel');
     updateGridLines();
-    drawMouse();
 }
 
 function addGridLines() {
@@ -86,33 +85,33 @@ function updateGridLines() {
     gridToggler.checked ? addGridLines() : removeGridLines();
 }
 
-function drawMouse() {
+function draw() {
     let mouseIsDown = false;
     window.onmousedown = () => { mouseIsDown = true; }
     window.onmouseup = () => { mouseIsDown = false; }
 
-    pixels.forEach((pixel) => {
-        pixel.addEventListener('mouseover', () => {
-            // Color on mouseover if mouse is down, else only 
-            // color on mousedown
-            if (mouseIsDown) {
-                pixel.style.backgroundColor = rainbowMode? getColor() : selectedColor;
-            } else {
-                pixel.addEventListener('mousedown', () => {
-                    pixel.style.backgroundColor = rainbowMode? getColor() : selectedColor;
-                });
-            }
+    ['mousedown', 'touchmove'].forEach(function(e) {
+        grid.addEventListener(e, function(event) {
+            (e === 'touchmove') ? 
+                setPixelColor(event.touches[0].clientX, event.touches[0].clientY) : 
+                setPixelColor(event.clientX, event.clientY); 
         });
+    });
+
+    grid.addEventListener('mouseover', function(e) {
+        if (mouseIsDown) setPixelColor(e.clientX, e.clientY);
     });
 }
 
-function drawTouch() {
-    grid.addEventListener('touchmove', function(e) {
-        // Credit to: https://gist.github.com/VehpuS/6fd5dca2ea8cd0eb0471
-        let touch = e.touches[0];
-        let pixel = document.elementFromPoint(touch.clientX, touch.clientY);
-        pixel.style.backgroundColor = rainbowMode ? getColor() : selectedColor;
-    });
+// function drawTouch() {
+//     grid.addEventListener('touchmove', function(e) {
+//         setPixelColor(e.touches[0].clientX, e.touches[0].clientY);
+//     });
+// }
+
+function setPixelColor(x, y) {
+    let currentPixel = document.elementFromPoint(x, y);
+    currentPixel.style.backgroundColor = getColor();
 }
 
 function getColor() {
@@ -146,7 +145,6 @@ const grid = document.querySelector('.pixel-grid');
 const rainbowToggler = document.querySelector('#rainbow-switch-checkbox');
 let rainbowMode = false;
 const colorPicker = document.querySelector('#colorpicker');
-let selectedColor = getColor();
 
 // Control box 4 elements
 const gridSizeSlider = document.querySelector('#grid-size-slider');
@@ -161,18 +159,11 @@ let pixels = document.querySelectorAll('.pixel');
 updateGridLines();
 
 // Listen for drawing events
-drawMouse();
-drawTouch();
+draw();
 
 // Control box 1 event listeners
-colorPicker.addEventListener('change', () => {
-    selectedColor = getColor();
-})
 rainbowToggler.addEventListener('change', () => {
     rainbowMode = !rainbowMode;
-    if (!rainbowMode) {
-        selectedColor = getColor();
-    }
 })
 
 // Control box 4 event listeners
