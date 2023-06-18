@@ -35,11 +35,11 @@ async function makeGrid() {
 }
 
 async function clearGrid() {
-    // // Select random shaking animation
-    // let shakeNumber = Math.floor(Math.random() * 2) + 1;
-    // sketcher.classList.add(`shake${shakeNumber}`);
-    // // Prevent appearance of scroll bars during animation
-    // body.style.overflow = 'hidden';
+    // Select random shaking animation
+    let shakeNumber = Math.floor(Math.random() * 2) + 1;
+    sketcher.classList.add(`shake${shakeNumber}`);
+    // Prevent appearance of scroll bars during animation
+    body.style.overflow = 'hidden';
     
 
     grid.classList.add('clearing');
@@ -58,11 +58,11 @@ async function clearGrid() {
     await delay(1000);
     grid.classList.remove('clearing');
 
-    // sketcher.addEventListener('animationiteration', () => {
-    //     sketcher.classList.remove(`shake${shakeNumber}`);
-    // });
-    // await delay(1200);
-    // body.style.overflow = 'visible';
+    sketcher.addEventListener('animationiteration', () => {
+        sketcher.classList.remove(`shake${shakeNumber}`);
+    });
+    await delay(1200);
+    body.style.overflow = 'visible';
 }
 
 async function changeGrid() {
