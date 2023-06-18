@@ -255,19 +255,6 @@ input:checked + .toggler:before {
     border-right: 1px dashed rgba(110, 110, 110, 0.3);
 }
 
-.pixel:hover {
-    animation-name: pixel-hover-blink;
-    animation-timing-function: ease;
-    animation-duration: 1.3s;
-    animation-iteration-count: infinite;
-}
-
-@keyframes pixel-hover-blink {
-    0% { box-shadow: inset 0 0 0 2000px rgba(255, 0, 150, 0.14); }
-    33% { box-shadow: inset 0 0 0 2000px rgba(255, 0, 150, 0.24);  }
-    100% { box-shadow: inset 0 0 0 2000px rgba(255, 0, 150, 0.14);  }
-}
-
 .pixel.clicked {
     animation-name: pixel-pop;
     animation-timing-function: ease;
@@ -292,6 +279,22 @@ input:checked + .toggler:before {
 
     box-shadow: -5px -5px 9px rgba(255,255,255,0.45), 5px 5px 9px rgba(94,104,121,0.3);
              
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .pixel:hover {
+        animation-name: pixel-hover-blink;
+        animation-timing-function: ease;
+        animation-duration: 1.3s;
+        animation-iteration-count: infinite;
+    }
+    
+    @keyframes pixel-hover-blink {
+        0% { box-shadow: inset 0 0 0 2000px rgba(255, 0, 150, 0.14); }
+        33% { box-shadow: inset 0 0 0 2000px rgba(255, 0, 150, 0.24);  }
+        100% { box-shadow: inset 0 0 0 2000px rgba(255, 0, 150, 0.14);  }
+    }
+    
 }
 
 @media(max-width: 1220px) {
