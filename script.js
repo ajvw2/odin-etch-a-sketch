@@ -41,6 +41,8 @@ async function clearGrid() {
     // // Prevent appearance of scroll bars during animation
     // body.style.overflow = 'hidden';
     
+
+    grid.classList.add('clearing');
     let pixelAmount = pixels.length;
 
     for (let i = 0; i < pixelAmount; i++) {
@@ -54,6 +56,7 @@ async function clearGrid() {
         }
     }
     await delay(1000);
+    grid.classList.remove('clearing');
 
     // sketcher.addEventListener('animationiteration', () => {
     //     sketcher.classList.remove(`shake${shakeNumber}`);
@@ -106,7 +109,7 @@ function setPixelColor(x, y) {
         currentPixel.classList.add('clicked');
         currentPixel.addEventListener('animationend', () => {
             currentPixel.classList.remove('clicked');
-        })
+        });
     }
 }
 
@@ -124,7 +127,7 @@ function getColor() {
         b = parseInt(color.substr(5,2), 16);
     }
     
-    return `rgba(${r}, ${g}, ${b}, 0.700)`;
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 function delay(ms) {
