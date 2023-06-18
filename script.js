@@ -20,11 +20,11 @@ async function makeGrid() {
 }
 
 async function clearGrid() {
-    // Select random shaking animation
-    let shakeNumber = Math.floor(Math.random() * 2) + 1;
-    sketcher.classList.add(`shake${shakeNumber}`);
-    // Prevent appearance of scroll bars during animation
-    body.style.overflow = 'hidden';
+    // // Select random shaking animation
+    // let shakeNumber = Math.floor(Math.random() * 2) + 1;
+    // sketcher.classList.add(`shake${shakeNumber}`);
+    // // Prevent appearance of scroll bars during animation
+    // body.style.overflow = 'hidden';
     
 
     grid.classList.add('clearing');
@@ -42,11 +42,11 @@ async function clearGrid() {
     await delay(1000);
     grid.classList.remove('clearing');
 
-    sketcher.addEventListener('animationiteration', () => {
-        sketcher.classList.remove(`shake${shakeNumber}`);
-    });
-    await delay(1200);
-    body.style.overflow = 'visible';
+    // sketcher.addEventListener('animationiteration', () => {
+    //     sketcher.classList.remove(`shake${shakeNumber}`);
+    // });
+    // await delay(1200);
+    // body.style.overflow = 'visible';
 }
 
 async function changeGrid() {
@@ -59,6 +59,13 @@ function updateGridLines() {
     if (gridToggler.checked) {
         for (let i = 0; i < pixelAmount; i++) {
             pixels[i].classList.add('borders-on');
+            if (i % gridSize === gridSize - 1) {
+                pixels[i].classList.add('on-right');
+            }
+            if (i > (gridSize * (gridSize - 1)) - 1)
+            {
+                pixels[i].classList.add('on-bottom');
+            }
         }
     } else {
         for (let i = 0; i < pixelAmount; i++) {
@@ -117,6 +124,29 @@ function getColor() {
 
 function delay(ms) {
     return new Promise((resolution) => {setTimeout(() => resolution('done!'), ms)});
+}
+
+function download() {
+    const pixelAmount = gridSize ** 2;
+    const image = document.createElement('canvas');
+    image.height = gridSize;
+    image.width = gridSize;
+    const imageContext = image.getContext('2d');
+    imageContext.clearRect(0, 0, image.width, image.height);
+
+    for (let i = 0; i < pixelAmount; i++) {
+        if (pixels[i].style.backgroundColor) {
+            imageContext.fillStyle = pixels[i].style.backgroundColor;
+            imageContext.fillRect(i % gridSize, Math.floor(i / gridSize), 1, 1);
+        }
+    }
+
+    const imageDataURL = image.toDataURL("image/png");
+
+    const link = document.createElement('a');
+    link.href = imageDataURL;
+    link.download = 'sketch.png';
+    link.click();
 }
 
 // Main elements

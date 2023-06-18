@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 .selectDisable {
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -32,6 +34,7 @@ body {
     padding: 0;
 
     height: 100vh;
+    font-family: 'Roboto', sans-serif;
 }
 
 .sketcher-wrapper {
@@ -50,10 +53,10 @@ body {
     background-color: white;
     padding: 32px;
     gap: 0px;
-    border: 2px solid rgba(63, 25, 0, 0.575);
+    border: 4px solid rgb(41, 5, 5);
     border-radius: 32px;
     background-color: rgb(199, 26, 26);
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    box-shadow: 0 10px 0 0px rgb(41, 5, 5);
     transition: all 0.1s ease;
 }
 
@@ -75,30 +78,25 @@ body {
     /* Duration, 2s per loop */
     0% { 
         transform: perspective(none) rotateX(0deg);
-        filter: blur(0px);
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
     }
     7% { 
         transform: perspective(75em) rotateX(45deg) scale(0.8) translateY(50px);
-        filter: blur(2px);
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset, rgba(0, 0, 0, 0.493) 0px -40px 40px -30px;
         animation-timing-function: cubic-bezier(.62,.13,.64,.99);
     }
     40% { 
         transform: perspective(none) rotateX(0deg) scale(1) translateY(0px);
-        filter: blur(0px);
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
         animation-timing-function: cubic-bezier(.02,.87,.29,.96);
     }
     49% { 
         transform: perspective(75em) rotateX(45deg) scale(0.8) translateY(50px);
-        filter: blur(2px); 
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset, rgba(0, 0, 0, 0.493) 0px -40px 40px -30px;
         animation-timing-function: cubic-bezier(.62,.13,.64,.99);
     }
     80% { 
         transform: perspective(none) rotateX(0deg) scale(1);
-        filter: blur(0px);
         box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset; 
         animation-timing-function: cubic-bezier(.02,.87,.29,.96);
     }
@@ -106,13 +104,13 @@ body {
 
 @keyframes shake-the-sketcher {
     /* Duration: 0.75s per loop */
-    0% { transform: translateX(0); filter: blur(0px); }
-    25% { transform: translateY(-9px); filter: blur(0px); }
-    35% { transform: translateY(-9px) rotate(12deg); filter: blur(0px); }
-    55% { transform: translateY(-9px) rotate(-12deg); filter: blur(2px); }
-    65% { transform: translateY(-9px) rotate(12deg); filter: blur(0px); }
-    75% { transform: translateY(-9px) rotate(-12deg); filter: blur(2px); }
-    100% { transform: translateY(0) rotate(0); filter: blur(0px); }
+    0% { transform: translateX(0) }
+    25% { transform: translateY(-9px) }
+    35% { transform: translateY(-9px) rotate(12deg) }
+    55% { transform: translateY(-9px) rotate(-12deg) }
+    65% { transform: translateY(-9px) rotate(12deg) }
+    75% { transform: translateY(-9px) rotate(-12deg) }
+    100% { transform: translateY(0) rotate(0) }
   }
 
 .panel {
@@ -151,7 +149,34 @@ body {
 #cb1,
 #cb4 {
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0.5em;
+    border: 2px solid rgb(41, 5, 5);
+    height: 34px;
+    -webkit-transition: .4s;
+    transition: .4s;
+    background-color: #eceff4;
+}
+
+.slider:hover {
+    background-color: #e4aa0b;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 0.5em;
+    border: 2px solid rgb(41, 5, 5);
+    background-color: #eceff4;
+    width: 34px;
+    height: 26px;
+    transform: translate3d(0, -0.75em, 1em);
+    box-shadow: 0 10px 0 0px black;
 }
 
 .switch {
@@ -159,6 +184,7 @@ body {
     position: relative;
     width: 60px;
     height: 34px;
+    font-size: 18px;
 }
 
 .switch input {
@@ -174,10 +200,11 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: #eceff4;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 34px;
+    border-radius: 0.5em;
+    border: 2px solid rgb(41, 5, 5);
 }
 
 .toggler:before {
@@ -187,24 +214,84 @@ body {
     width: 26px;
     left: 4px;
     bottom: 4px;
-    background-color: white;
+    background-color: #eceff4;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 50%;
+    transition-timing-function: ease;
+    border-radius: 0.5em;
+    border: 2px solid rgb(41, 5, 5);
+    transform: translate3d(0, -0.6em, 1em);
+    box-shadow: 0 10px 0 0px black;
+}
+
+input:hover + .toggler:before {
+    background-color: #e4aa0b;
 }
 
 input:checked + .toggler {
-    background-color: #2196F3;
+    background-color: #e4aa0b;
+}
+
+#grid-switch-checkbox:checked + .toggler {
+    background-image: linear-gradient(#78b7ff 1.5px, transparent 1.5px), linear-gradient(to right, #78b7ff 1.5px, transparent 1.5px);
+    background-size: 10px 10px;
+    background-color: #eceff4;
+    background-position: -25px -25px;
 }
 
 input:focus + .toggler {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #e4aa0b;
 }
 
 input:checked + .toggler:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    transform: translate3d(22px, -0.6em, 1em);
+}
+
+#clear {
+    font-family: 'Roboto', sans-serif;
+    padding: 0.5em 1em;
+    font-size: 1rem;
+    font-weight: 800;
+    color:rgb(41, 5, 5);
+    background-color: #eceff4;
+    border: 2px solid rgb(41, 5, 5);
+    border-radius: 0.5em;
+    transform-style: preserve-3d;
+    transition: all 175ms cubic-bezier(0, 0, 1, 1);
+}
+
+#clear::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(41, 5, 5);
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px rgb(41, 5, 5);
+    transform: translate3d(0, 0.6em, -1em);
+    transition: all 175ms cubic-bezier(0, 0, 1, 1);
+}
+
+#clear:hover {
+    background-color: #e4aa0b;
+    transform: translate(0, 0.125em);
+}
+
+#clear:hover::before {
+    transform: translate3d(0, 0.475em, -1em);
+}
+
+#clear:active {
+    background-color: #be1586;
+    transform: translate(0em, 0.375em);
+  }
+
+#clear:active::before {
+    transform: translate3d(0, 0.225em, -1em);
 }
 
 .screen-box {
@@ -223,16 +310,12 @@ input:checked + .toggler:before {
     padding: 20px 0px;
 }
 
-#clear {
-    padding: 5px;
-    font-size: 20px;
-    font-weight: 800;
-}
+
 
 .pixel-grid {
     touch-action: none;
     display: grid;
-    border: 4px solid rgba(54, 0, 0, 0.651);
+    border: 6px solid rgb(41, 5, 5);
     width: 680px;
     height: 680px;
     background-color: rgb(255, 239, 239);
@@ -251,6 +334,13 @@ input:checked + .toggler:before {
     border-radius: 2px;
 }
 
+.pixel.on-bottom {
+    border-bottom: none;
+}
+
+.pixel.on-right {
+    border-right: none;
+}
 .pixel.got-colored {
     animation-name: pixel-pop;
     animation-timing-function: ease;
@@ -265,16 +355,14 @@ input:checked + .toggler:before {
 .knob {
     font-size: 30px;
     border-radius: 50%;
-    border: 4px solid rgba(255, 255, 255, 0.651);
-    background: radial-gradient(#eceff4, #dfdcda, #cfc6c6, #eceff4);
+    border: 4px solid rgb(41, 5, 5);
+    background-color:#eceff4;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 120px;
     width: 120px;
-
-    box-shadow: -5px -5px 9px rgba(255,255,255,0.45), 5px 5px 9px rgba(94,104,121,0.3);
-             
+    box-shadow: 0 10px 0 0px black;        
 }
 
 @media (hover: hover) and (pointer: fine) {
