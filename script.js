@@ -2,25 +2,35 @@ async function makeGrid() {
     gridSize = gridSizeSlider.value;
     let pixelAmount = gridSize ** 2;
     let widthPercentage = 100 / gridSize;
-    let allPixels = document.createDocumentFragment();
+    let newPixels = document.createDocumentFragment();
 
+    // for (let i = 0; i < pixelAmount; i++) {
+    //     let newPixel = document.createElement('div');
+    //     newPixel.classList.add('pixel');
+
+    //     let onLastColumn = (i % gridSize) === (gridSize - 1);
+    //     if (onLastColumn) newPixel.classList.add('last-column');
+
+    //     let onLastRow = i > (gridSize * (gridSize - 1) - 1);
+    //     if (onLastRow) newPixel.classList.add('last-row');
+    //     // newPixel.setAttribute('id', `pixel${i}`);
+
+    //     newPixel.style.flex = `1 0 ${widthPercentage}%`;
+    //     allPixels.append(newPixel);
+    // }
+
+    grid.style.gridTemplateColumns = `repeat(${gridSize}, ${widthPercentage}%)`;
+    grid.style.gridTemplateRows = `repeat(${gridSize}, ${widthPercentage}%)`;
+    
     for (let i = 0; i < pixelAmount; i++) {
-        let newPixel = document.createElement('div');
-        newPixel.classList.add('pixel');
-
-        let onLastColumn = (i % gridSize) === (gridSize - 1);
-        if (onLastColumn) newPixel.classList.add('last-column');
-
-        let onLastRow = i > (gridSize * (gridSize - 1) - 1);
-        if (onLastRow) newPixel.classList.add('last-row');
-        newPixel.setAttribute('id', `pixel${i}`);
-
-        newPixel.style.flex = `1 0 ${widthPercentage}%`;
-        allPixels.append(newPixel);
+        let pixel = document.createElement('div');
+        pixel.classList.add('pixel');
+        pixel.setAttribute('draggable', 'false');
+        newPixels.append(pixel);
     }
 
-
-    grid.replaceChildren(allPixels);
+    grid.replaceChildren(newPixels);
+    pixels = document.querySelectorAll('.pixel');
     updateGridLines();
 }
 
@@ -31,25 +41,19 @@ async function clearGrid() {
     // // Prevent appearance of scroll bars during animation
     // body.style.overflow = 'hidden';
     
-    let pixelAmount = gridSize ** 2;
-    grid.classList.add('clearing');
+    let pixelAmount = pixels.length;
 
     for (let i = 0; i < pixelAmount; i++) {
-        let selectedPixel = document.querySelector(`#pixel${i}`);
-
-        // Remove (background) color from pixel
-        selectedPixel.style.backgroundColor = 'transparent';
+        pixels[i].style.backgroundColor = 'transparent';
+        
         
         // Create sweeping animation while clearing
-        if (i % gridSize === 0) {
-            // selectedPixel.innerHTML = "&nbsp;";
-            let delayTime = Math.floor(750 / gridSize);
+        if (i % gridSize / 4 === 0) {
+            let delayTime = Math.max(Math.floor(1000 / gridSize), 25);
             await delay(delayTime);
-            // selectedPixel.innerHTML = "";
         }
     }
-
-    grid.classList.remove('clearing');
+    await delay(1000);
 
     // sketcher.addEventListener('animationiteration', () => {
     //     sketcher.classList.remove(`shake${shakeNumber}`);
@@ -58,10 +62,23 @@ async function clearGrid() {
     // body.style.overflow = 'visible';
 }
 
+async function changeGrid() {
+    clearGrid();
+    setTimeout(makeGrid, 50 * gridSize);
+}
+
 function updateGridLines() {
-    gridToggler.checked ? 
-        grid.classList.add('grid-lines-on') : 
-        grid.classList.remove('grid-lines-on');
+    let pixelAmount = gridSize ** 2;
+    if (gridToggler.checked) {
+        for (let i = 0; i < pixelAmount; i++) {
+            pixels[i].classList.add('borders-on');
+        }
+    } else {
+        for (let i = 0; i < pixelAmount; i++) {
+            pixels[i].classList.remove('borders-on');
+        } 
+    }
+    
 }
 
 function draw() {
@@ -84,7 +101,13 @@ function draw() {
 
 function setPixelColor(x, y) {
     let currentPixel = document.elementFromPoint(x, y);
-    currentPixel.style.backgroundColor = getColor();
+    if (currentPixel.classList.contains('pixel')) {
+        currentPixel.style.backgroundColor = getColor();
+        currentPixel.classList.add('clicked');
+        currentPixel.addEventListener('animationend', () => {
+            currentPixel.classList.remove('clicked');
+        })
+    }
 }
 
 function getColor() {
@@ -126,6 +149,7 @@ const clearButton = document.querySelector("#clear");
 
 // Get initial grid size from slider and make the grid
 let gridSize;
+let pixels;
 makeGrid();
 
 // Listen for drawing events
@@ -137,7 +161,7 @@ rainbowToggler.addEventListener('change', () => {
 })
 
 // Control box 4 event listeners
-gridSizeSlider.addEventListener('change', makeGrid);
+gridSizeSlider.addEventListener('change', changeGrid);
 clearButton.addEventListener('click', clearGrid);
 gridToggler.addEventListener('change', updateGridLines);
 
