@@ -4,21 +4,6 @@ async function makeGrid() {
     let widthPercentage = 100 / gridSize;
     let newPixels = document.createDocumentFragment();
 
-    // for (let i = 0; i < pixelAmount; i++) {
-    //     let newPixel = document.createElement('div');
-    //     newPixel.classList.add('pixel');
-
-    //     let onLastColumn = (i % gridSize) === (gridSize - 1);
-    //     if (onLastColumn) newPixel.classList.add('last-column');
-
-    //     let onLastRow = i > (gridSize * (gridSize - 1) - 1);
-    //     if (onLastRow) newPixel.classList.add('last-row');
-    //     // newPixel.setAttribute('id', `pixel${i}`);
-
-    //     newPixel.style.flex = `1 0 ${widthPercentage}%`;
-    //     allPixels.append(newPixel);
-    // }
-
     grid.style.gridTemplateColumns = `repeat(${gridSize}, ${widthPercentage}%)`;
     grid.style.gridTemplateRows = `repeat(${gridSize}, ${widthPercentage}%)`;
     
@@ -47,7 +32,6 @@ async function clearGrid() {
 
     for (let i = 0; i < pixelAmount; i++) {
         pixels[i].style.backgroundColor = 'transparent';
-        
         
         // Create sweeping animation while clearing
         if (i % gridSize / 4 === 0) {
@@ -106,9 +90,10 @@ function setPixelColor(x, y) {
     let currentPixel = document.elementFromPoint(x, y);
     if (currentPixel.classList.contains('pixel')) {
         currentPixel.style.backgroundColor = getColor();
-        currentPixel.classList.add('clicked');
+        // Animate colored pixel
+        currentPixel.classList.add('got-colored');
         currentPixel.addEventListener('animationend', () => {
-            currentPixel.classList.remove('clicked');
+            currentPixel.classList.remove('got-colored');
         });
     }
 }

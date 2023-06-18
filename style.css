@@ -251,7 +251,7 @@ input:checked + .toggler:before {
     border-radius: 2px;
 }
 
-.pixel.clicked {
+.pixel.got-colored {
     animation-name: pixel-pop;
     animation-timing-function: ease;
     animation-duration: 0.2s;
