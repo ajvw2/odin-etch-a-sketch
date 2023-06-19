@@ -143,10 +143,12 @@ body {
 .control-box {
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    flex-direction: column;
     /* border: 1px dotted black; */
     padding: 12px;
+    gap: 4px;
 }
 
 .control-box-name {
@@ -154,15 +156,15 @@ body {
     font-weight: 800;
     color: rgb(41, 5, 5);
     padding-bottom: 10px;
-    /* text-decoration: underline 2px;
-     */
 }
 
-#cb1,
-#cb4 {
+.tool-wrapper {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    flex-wrap: wrap;
+    max-height: 120px;
+    gap: 5px;
+    column-gap: 40px;
     
 }
 
@@ -237,6 +239,7 @@ body {
     background-position-x: -2px;
     background-position-y: 2px;
     padding: 0px 4px;
+    transition: all 0.3s ease;
 }
 
 .slider:hover {
@@ -359,6 +362,32 @@ input:checked + .toggler {
                             rgba(255,0,0,1) 100%);
 }
 
+#eraser-switch-checkbox:checked + .toggler {
+    background-color: #eceff4;
+}
+
+#lighten-switch-checkbox:checked + .toggler {
+    background-color: #eceff4;
+    border-color: white;
+    box-shadow: 0 0 15px 2px white;
+}
+
+#lighten-switch-checkbox:checked + .toggler:before {
+    background-color: #ffce47;
+    border-color: rgb(163, 125, 54);
+    box-shadow: 0 10px 0 0px rgb(163, 125, 54), 2px 12px 14px 0px rgba(0, 0, 0, 0.4);
+}
+
+#darken-switch-checkbox:checked + .toggler {
+    background-color: rgb(41, 5, 5);
+    box-shadow: 0 0 15px 2px rgb(41, 5, 5);
+}
+
+#darken-switch-checkbox:checked + .toggler:before {
+    background-color: #4b3804;
+    box-shadow: 0 10px 0 0px black, 2px 12px 14px 0px rgba(0, 0, 0, 0.4);
+}
+
 input:focus + .toggler {
     box-shadow: 0 0 1px #e4aa0b;
 }
@@ -368,11 +397,12 @@ input:checked + .toggler:before {
     background-color: #e4aa0b;
 }
 
-#clear {
+button {
     font-family: 'Roboto', sans-serif;
     padding: 0.5em 1em;
     font-size: 1rem;
     font-weight: 800;
+    /* width: 130px; */
     color:rgb(41, 5, 5);
     background-color: #eceff4;
     border: 2px solid rgb(41, 5, 5);
@@ -381,7 +411,7 @@ input:checked + .toggler:before {
     transition: all 175ms cubic-bezier(0, 0, 1, 1);
 }
 
-#clear::before {
+button::before {
     position: absolute;
     content: "";
     width: 100%;
@@ -397,21 +427,21 @@ input:checked + .toggler:before {
     transition: all 175ms cubic-bezier(0, 0, 1, 1);
 }
 
-#clear:hover {
+button:hover {
     background-color: #e4aa0b;
     transform: translate(0, 0.125em);
 }
 
-#clear:hover::before {
+button:hover::before {
     transform: translate3d(0, 0.475em, -1em);
 }
 
-#clear:active {
+button:active {
     background-color: #be1586;
     transform: translate(0em, 0.375em);
   }
 
-#clear:active::before {
+button:active::before {
     transform: translate3d(0, 0.225em, -1em);
 }
 
@@ -444,6 +474,10 @@ input:checked + .toggler:before {
     
 }
 
+.pixel {
+    background-color: transparent;
+}
+
 .clearing > .pixel {
     transition: all 0.2s ease;
 }
@@ -469,7 +503,7 @@ input:checked + .toggler:before {
 }
 
 @keyframes pixel-pop {
-    50% { transform: scale(1.5) }
+    50% { transform: scale(1.5); }
 }
 
 .knob {

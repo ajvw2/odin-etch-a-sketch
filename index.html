@@ -27,13 +27,52 @@
                         </label>
                     </div>
                 </div>
-                <div class="control-box" id="cb2">fll+ers</div>
-                <div class="control-box" id="cb3">l+drk</div>
-                <div class="control-box" id="cb4">
+                <div class="control-box" id="cb2">
+                    <div class="control-box-name">TOOL SELECTION</div>
+                   <div class="tool-wrapper">
+                        <div class="menu-item-wrapper">
+                            <div class="ui-icon fill">
+                                <img src="./images/fill.png">
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="fill-switch-checkbox">
+                                <span class="toggler"></span>
+                            </label>
+                        </div>
+                        <div class="menu-item-wrapper">
+                            <div class="ui-icon eraser">
+                                <img src="./images/eraser.png">
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="eraser-switch-checkbox">
+                                <span class="toggler"></span>
+                            </label>
+                        </div>
+                        <div class="menu-item-wrapper">
+                            <div class="ui-icon lighten">
+                                <img src="./images/lighten.png">
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="lighten-switch-checkbox">
+                                <span class="toggler"></span>
+                            </label>
+                        </div>
+                        <div class="menu-item-wrapper">
+                            <div class="ui-icon darken">
+                                <img src="./images/darken.png">
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="darken-switch-checkbox">
+                                <span class="toggler"></span>
+                            </label>
+                        </div>
+                   </div>
+                </div>
+                <div class="control-box" id="cb3">
                     <div class="control-box-name">GRID SETTINGS</div>
                     <div class="menu-item-wrapper">
                         <div class="ui-icon grid-size-icon">
-                            <img src="./images/gridsize.svg">
+                            <img src="./images/gridsize.png">
                         </div>
                         <div class="slider-container">
                             <input type="range" min="4" max="64" value="15" class="slider" id="grid-size-slider"> 
@@ -42,7 +81,7 @@
                     </div>
                     <div class="menu-item-wrapper">
                         <div class="ui-icon">
-                            <img src="./images/grid.svg">
+                            <img src="./images/grid.png">
                         </div>
                         <label class="switch">
                             <input type="checkbox" id="grid-switch-checkbox" checked>
@@ -50,6 +89,10 @@
                         </label>
                     </div>
                     <button id="clear">CLEAR GRID</button>
+                </div>
+                <div class="control-box" id="cb4">
+                    <div class="control-box-name">MORE</div>
+                    <button id="download">DOWNLOAD SKETCH</button>
                 </div>
             </div>
             <div class="panel screen selectDisable">
