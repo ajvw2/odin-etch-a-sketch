@@ -49,11 +49,6 @@ async function clearGrid() {
     // body.style.overflow = 'visible';
 }
 
-async function changeGrid() {
-    clearGrid();
-    setTimeout(makeGrid, 50 * gridSize);
-}
-
 function updateGridLines() {
     let pixelAmount = gridSize ** 2;
     if (gridToggler.checked) {
@@ -149,6 +144,15 @@ function download() {
     link.click();
 }
 
+function setGridSizeDisplay() {
+    let selectedGridSize = gridSizeSlider.value;
+    let sliderWidth = gridSizeSlider.offsetWidth - 38;
+    let widthPercentage = sliderWidth / 60;
+
+    gridSizeDisplay.style.left = (`${selectedGridSize * widthPercentage + 4}px`);
+    gridSizeDisplay.textContent = selectedGridSize;
+}
+
 // Main elements
 const body = document.querySelector('body');
 const sketcher = document.querySelector('.sketcher');
@@ -159,9 +163,12 @@ const grid = document.querySelector('.pixel-grid');
 const rainbowToggler = document.querySelector('#rainbow-switch-checkbox');
 let rainbowMode = false;
 const colorPicker = document.querySelector('#colorpicker');
+const colorPickerDisabler = document.querySelector('.colorpicker-disabler');
 
 // Control box 4 elements
 const gridSizeSlider = document.querySelector('#grid-size-slider');
+const gridSizeDisplay = document.querySelector('.grid-size-value');
+setGridSizeDisplay();
 const gridToggler = document.querySelector('#grid-switch-checkbox');
 const clearButton = document.querySelector("#clear");
 
@@ -176,12 +183,25 @@ draw();
 // Control box 1 event listeners
 rainbowToggler.addEventListener('change', () => {
     rainbowMode = !rainbowMode;
-})
+    if (rainbowMode) {
+        colorPickerDisabler.style.display = 'block';
+    } else {
+        colorPickerDisabler.style.display = 'none';
+    }
+});
 
 // Control box 4 event listeners
-gridSizeSlider.addEventListener('change', changeGrid);
+gridSizeSlider.addEventListener('change', () => {
+    console.log('Changed!');
+    makeGrid();
+});
+gridSizeSlider.addEventListener('input', setGridSizeDisplay);
 clearButton.addEventListener('click', clearGrid);
 gridToggler.addEventListener('change', updateGridLines);
+
+
+
+
 
 
 

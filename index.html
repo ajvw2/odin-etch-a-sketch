@@ -12,22 +12,43 @@
         <div class="sketcher selectDisable">
             <div class="panel controls">
                 <div class="control-box" id="cb1">
-                    <input type="color" id="colorpicker" value="#000000">
-                    <label class="switch">
-                        <input type="checkbox" id="rainbow-switch-checkbox">
-                        <span class="toggler"></span>
-                    </label>
+                    <div class="control-box-name">COLOR SELECTION</div>
+                    <div class="colorpicker-wrapper">
+                        <input type="color" id="colorpicker" value="#000000">
+                        <div class="colorpicker-disabler"></div>
+                    </div>
+                    <div class="menu-item-wrapper">
+                        <div class="ui-icon rainbow">
+                            <img src="./images/rainbow.png">
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="rainbow-switch-checkbox">
+                            <span class="toggler"></span>
+                        </label>
+                    </div>
                 </div>
                 <div class="control-box" id="cb2">fll+ers</div>
                 <div class="control-box" id="cb3">l+drk</div>
                 <div class="control-box" id="cb4">
-                    <div class="slider-container">
-                        <input type="range" min="4" max="64" value="15" class="slider" id="grid-size-slider">
+                    <div class="control-box-name">GRID SETTINGS</div>
+                    <div class="menu-item-wrapper">
+                        <div class="ui-icon grid-size-icon">
+                            <img src="./images/gridsize.svg">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" min="4" max="64" value="15" class="slider" id="grid-size-slider"> 
+                            <div class="grid-size-value">15</div>
+                        </div>
                     </div>
-                    <label class="switch">
-                        <input type="checkbox" id="grid-switch-checkbox" checked>
-                        <span class="toggler"></span>
-                    </label>
+                    <div class="menu-item-wrapper">
+                        <div class="ui-icon">
+                            <img src="./images/grid.svg">
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="grid-switch-checkbox" checked>
+                            <span class="toggler"></span>
+                        </label>
+                    </div>
                     <button id="clear">CLEAR GRID</button>
                 </div>
             </div>
@@ -37,6 +58,9 @@
                 </div>
                 <div class="screen-box knobs">
                     <div class="knob vertical"></div>
+                    <div class="sketcher-logo">
+                        <img src="./images/sketcher-vertical.png">
+                    </div>
                     <div class="knob horizontal"></div>
                 </div>
             </div>
