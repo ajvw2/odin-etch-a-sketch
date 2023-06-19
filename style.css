@@ -32,7 +32,7 @@ body {
     align-items: center;
     margin: 0;
     padding: 0;
-
+    background: linear-gradient(#78b7ff, #94bff0);
     height: 100vh;
     font-family: 'Roboto', sans-serif;
 }
@@ -56,7 +56,7 @@ body {
     border: 4px solid rgb(41, 5, 5);
     border-radius: 32px;
     background-color: rgb(199, 26, 26);
-    box-shadow: 0 10px 0 0px rgb(41, 5, 5);
+    box-shadow: 0 10px 0 0px rgb(41, 5, 5), 0 10px 20px 2px rgba(41, 5, 5, 0.5);
     transition: all 0.1s ease;
 }
 

@@ -33,6 +33,7 @@ async function clearGrid() {
 
     for (let i = 0; i < pixelAmount; i++) {
         pixels[i].style.backgroundColor = 'transparent';
+        pixels[i].style.filter = '';
         
         // Create sweeping animation while clearing
         if (i % gridSize / 4 === 0) {
@@ -112,6 +113,9 @@ function setPixelColor(x, y) {
     let currentPixel = document.elementFromPoint(x, y);
     if (currentPixel.classList.contains('pixel')) {
         currentPixel.style.backgroundColor = getColor();
+        if (erasing) {
+            currentPixel.style.filter = '';
+        }
         // Animate colored pixel
         if (!erasing) {
             currentPixel.classList.add('got-colored');
@@ -189,7 +193,10 @@ function floodFill(pixelID, currentColor) {
 }
 
 function setPixelBrightness(pixel) {
-    if (!pixel.style.filter) {
+    if (pixel.style.backgroundColor === '' || pixel.style.backgroundColor === 'transparent') {
+        return;
+    }
+    if (!pixel.style.filter || pixel.style.filter === '') {
         pixel.style.filter = lighten ? 'brightness(110%)' : 'brightness(90%)';
     } else {
         const currentBrightness = pixel.style.filter.match(/\d/g).join('');
