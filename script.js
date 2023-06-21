@@ -301,8 +301,13 @@ function download() {
 
 // Main elements
 const body = document.querySelector('body');
+const sketcherWrapper = document.querySelector('.sketcher-wrapper');
 const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
+const menuCollapseButton = document.querySelector('.collapsible');
+let displayingMenu = false;
+const menuCollapseArrow = document.querySelector('#menu-collapse-arrow');
+const controlPanel = document.querySelector('.controls');
 
 // Control box 1 elements
 const colorPicker = document.querySelector('#colorpicker');
@@ -338,6 +343,77 @@ let pixels;
 // Create grid and listen for drawing events
 makeGrid();
 editPixels();
+
+// Window resize event listener
+let windowWidth = document.body.clientWidth;
+setSketcherWidth();
+window.addEventListener('resize', () => {
+    windowWidth = document.body.clientWidth;
+    setSketcherWidth();
+    collapseButtonUpdater();
+});
+
+function setSketcherWidth() {
+    if (windowWidth >= 1300) {
+        controlPanel.style.maxHeight = '733px';
+        sketcherWrapper.style.maxWidth = (displayingMenu) ? '1300px' : '1050px';
+        menuCollapseButton.style.flex = 0;
+        menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-open.png)' : 'url(./images/menu-right-open.png)'; 
+        controlPanel.style.maxWidth = (displayingMenu) ? '250px' : '0px';
+        controlPanel.style.minWidth = (displayingMenu) ? '250px' : '0px';
+    } else if (windowWidth > 755) {
+        controlPanel.style.maxHeight = '733px';
+        sketcherWrapper.style.maxWidth = (displayingMenu) ? `${windowWidth}px` : `${windowWidth - 250}px`;
+        menuCollapseButton.style.flex = 0;
+        menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-open.png)' : 'url(./images/menu-right-open.png)'; 
+        controlPanel.style.maxWidth = (displayingMenu) ? '250px' : '0px';
+        controlPanel.style.minWidth = (displayingMenu) ? '250px' : '0px';
+    } else {
+        controlPanel.style.minWidth = '250px';
+        controlPanel.style.maxWidth = '550px';
+        if (windowWidth > 500) {
+            controlPanel.style.minHeight = (displayingMenu) ? '413px' : '0px';
+        } else {
+            controlPanel.style.minHeight = (displayingMenu) ? '750px' : '0px';
+        }
+        controlPanel.style.maxHeight = (displayingMenu) ? null : '0px';
+        sketcherWrapper.style.maxWidth = windowWidth;
+        menuCollapseButton.style.maxWidth = windowWidth;
+        menuCollapseButton.style.minWidth = windowWidth;
+        menuCollapseButton.style.flex = 1;
+        menuCollapseButton.style.flexBasis = '100%';
+        menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-up-open.png)' : 'url(./images/menu-down-open.png)'; 
+    }
+}
+
+// Collapse event listener
+menuCollapseButton.addEventListener('click', () => {
+    displayingMenu = !displayingMenu;
+    setSketcherWidth();
+    collapseButtonUpdater();
+});
+
+
+function collapseButtonUpdater() {
+    if (windowWidth > 755) {
+        menuCollapseButton.addEventListener('mouseover', () => {
+            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-filled.png)' : 'url(./images/menu-right-filled.png)' ; 
+        });
+        
+        menuCollapseButton.addEventListener('mouseout', () => {
+            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-open.png)' : 'url(./images/menu-right-open.png)' ; 
+        });
+    } else {
+        menuCollapseButton.addEventListener('mouseover', () => {
+            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-up-filled.png)' : 'url(./images/menu-down-filled.png)' ; 
+        });
+        
+        menuCollapseButton.addEventListener('mouseout', () => {
+            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-up-open.png)' : 'url(./images/menu-down-open.png)' ; 
+        });
+    }
+}
+
 
 // Control box 1 event listeners
 rainbowToggler.addEventListener('change', () => {
@@ -375,6 +451,8 @@ clearButton.addEventListener('click', clearGrid);
 
 // Control box 4 event listeners
 downloadButton.addEventListener('click', download);
+
+
 
 
 

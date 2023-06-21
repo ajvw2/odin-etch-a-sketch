@@ -18,6 +18,7 @@
     --pink2: #ff00963d;
     --purple: #be1586;
     --red: #c71a1a;
+    --red-darken: #991515;
 
     /* Other */
     --button-transform-function: cubic-bezier(0, 0, 1, 1);
@@ -67,7 +68,7 @@ body {
     display: flex;
     justify-content: center;
     flex: 1;
-    max-width: 1300px;
+    transition: max-width 0.3s ease-out, translateX 0.3s ease-out;
 }
 
 .sketcher {
@@ -77,13 +78,12 @@ body {
 
     flex: 1;
     padding: 32px;
+    padding-left: 10px;
 
     background-color: var(--red);
     border: 4px solid var(--brown);
     border-radius: 32px;
     box-shadow: 0 10px 0 0 var(--brown), 0 10px 20px 2px var(--brown-transparent);
-    
-    transition: all 0.1s ease;
 }
 
 .panel {
@@ -94,11 +94,41 @@ body {
     flex: 1;
 }
 
+.collapsible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    padding: 12px 1px;
+}
+
+.collapsible img,
+.collapsible:hover img {
+    width: 20px;
+}
+
+.collapsible:hover {
+    background-color: var(--red-darken);
+}
+
+.collapsible:hover img {
+    content: url('./images/menu-right-filled.png');
+}
+
+.collapsible:active {
+    background-color: var(--pink1);
+}
+
 .panel.controls {
+    display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     flex: 1;
-    min-width: 250px;
+    max-width: 0px;
+    max-height: 733px;
+    
+    transition: all 0.3s ease-out;
 }
 
 .panel.screen {
@@ -119,6 +149,7 @@ body {
     padding: 12px;
 
     color: var(--brown);
+    white-space: nowrap;
 }
 
 #cb1, #cb3 {
@@ -448,15 +479,6 @@ button::before {
     transition: all 175ms var(--button-transform-function);
 }
 
-button:active {
-    background-color: var(--purple);
-    transform: translate(0em, 0.375em);
-  }
-
-button:active::before {
-    transform: translate3d(0, 0.225em, -1em);
-}
-
 .screen-box {
     display: flex;
     align-items: center;
@@ -472,6 +494,8 @@ button:active::before {
 
     flex: 1;
     padding: 20px 0px;
+
+    transition: all 0.3s ease-out;
 }
 
 .pixel-grid {
@@ -588,6 +612,15 @@ button:active::before {
     button:hover::before {
         transform: translate3d(0, 0.475em, -1em);
     }
+
+    button:active {
+        background-color: var(--purple);
+        transform: translate(0em, 0.375em);
+      }
+    
+    button:active::before {
+        transform: translate3d(0, 0.225em, -1em);
+    }
     
     .pixel:hover {
         animation-name: selected;
@@ -683,6 +716,7 @@ button:active::before {
 
     .sketcher {
         gap: 20px;
+        padding: 20px;
     }
 
     .panel.controls {
@@ -692,7 +726,12 @@ button:active::before {
         flex-wrap: wrap;
     }
 
+    .collapsible {
+        padding: 1px 12px;
+    }
+
     .panel.screen {
+        min-height: 650px;
         min-width: 450px;
         gap: 20px;
     }
@@ -732,6 +771,10 @@ button:active::before {
         padding: 8px;
         min-width: 239px;
     }
+
+    #cb4 {
+        padding: 8px;
+    }
     
     .pixel-grid {
         width: 530px;
@@ -755,6 +798,7 @@ button:active::before {
     }
     
     .panel.screen {
+        min-height: 650px;
         gap: 0px;
     }
     
@@ -769,6 +813,15 @@ button:active::before {
 }
 
 @media(max-width: 550px) {
+    .panel.controls {
+        gap: 5px;
+    }
+
+    .panel.screen {
+        min-height: 600px;
+        gap: 0px;
+    }
+
     .pixel-grid {
         width: 430px;
         height: 430px;
@@ -813,6 +866,10 @@ button:active::before {
 }
 
 @media(max-width: 370px) {
+    .panel-screen {
+        min-height: 350px;
+    }
+    
     .pixel-grid {
         width: 300px;
         height: 300px;
@@ -825,6 +882,10 @@ button:active::before {
 }
 
 @media(max-width: 330px) {
+    .panel.screen {
+        min-height: 400px;
+    }
+
     .pixel-grid {
         width: 275px;
         height: 275px;
@@ -832,6 +893,10 @@ button:active::before {
 }
 
 @media(max-width: 300px) {
+    .panel-screen {
+        min-height: 280px;
+    }
+
     .pixel-grid {
         width: 250px;
         height: 250px;
