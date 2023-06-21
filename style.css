@@ -121,6 +121,10 @@ body {
     color: var(--brown);
 }
 
+#cb1, #cb3 {
+    gap: 6px;
+}
+
 #cb4 {
     padding-top: 16px;
 }
