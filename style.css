@@ -102,6 +102,10 @@ body {
     padding: 12px 1px;
 }
 
+.collapsible img {
+    width: 20px;
+}
+
 .panel.controls {
     display: flex;
     flex-direction: column;
