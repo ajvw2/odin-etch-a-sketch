@@ -67,7 +67,6 @@ body {
     display: flex;
     justify-content: center;
     flex: 1;
-
     max-width: 1300px;
 }
 
@@ -133,8 +132,8 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    column-gap: 40px; 
-    row-gap: 5px;
+    column-gap: 20px; 
+    row-gap: 10px;
 
     max-height: 120px;
 }
@@ -187,9 +186,17 @@ body {
     gap: 10px;
 }
 
+img {
+    pointer-events: none;
+}
+
 .ui-icon img {
     width: 34px;
     transform: translateY(3px);
+}
+
+.ui-icon.darken img {
+    width: 32px;
 }
 
 .ui-icon.rainbow,
@@ -197,6 +204,8 @@ body {
     /* Filters color to var(--brown) */
     filter: invert(9%) sepia(19%) saturate(2379%) hue-rotate(318deg) brightness(90%) contrast(108%);
 }
+
+
 
 .ui-icon.grid-size-icon {
     transform: translateY(-3px);
@@ -254,67 +263,82 @@ body {
 }
 
 .grid-size-value {
-    pointer-events: none;
     position: absolute;
-    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
     left: 0px;
-    width: 26px;
+    top: 0px;
     height: 26px;
+    width: 26px;
+
+    color: var(--brown);
     font-size: 12px;
     font-weight: 800;
-    color: var(--brown);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     text-align: center;
+    
     transform: translate(-3px, -6px);
+    
+    pointer-events: none;
 }
 
 
 .switch {
     display: inline-block;
     position: relative;
-    width: 60px;
+    
     height: 34px;
+    width: 60px;
+
     font-size: 18px;
 }
 
 .switch input {
-    opacity: 0;
-    width: 0;
     height: 0;
+    width: 0;
+    opacity: 0;
 }
 
 .toggler {
     position: absolute;
-    cursor: pointer;
-    top: 0;
+    
     left: 0;
     right: 0;
     bottom: 0;
+    top: 0;
+
     background-color: var(--off-white);
     background-position: -1px -1px;
+    border: 2px solid var(--brown);
+    border-radius: 10px;
+    
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 10px;
-    border: 2px solid var(--brown);
+
+    cursor: pointer;
 }
 
 .toggler:before {
     position: absolute;
     content: "";
+    
     height: 26px;
     width: 26px;
+    
     left: 4px;
     bottom: 4px;
+
     background-color: var(--off-white);
+    border: 2px solid var(--brown);
+    border-radius: 10px;
+    box-shadow: 0 10px 0 0px var(--brown), 2px 12px 14px 0px var(--black-transparent);
+
     -webkit-transition: .4s;
     transition: .4s;
     transition-timing-function: ease;
-    border-radius: 10px;
-    border: 2px solid var(--brown);
     transform: translate3d(0, -0.6em, 1em);
-    box-shadow: 0 10px 0 0px var(--brown), 2px 12px 14px 0px var(--black-transparent);
 }
 
 input:checked + .toggler {
@@ -393,6 +417,8 @@ button {
     
     transform-style: preserve-3d;
     transition: all 175ms var(--button-transform-function);
+
+    cursor: pointer;
 }
 
 button::before {
@@ -501,9 +527,9 @@ button:active::before {
 }
 
 .sketcher-logo img {
+    content: url(./images/sketcher-vertical.png);
     width: 80px;
-    padding-left: 10px;
-    padding-top: 15px;
+    padding-top: 15px; 
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -578,15 +604,29 @@ button:active::before {
     }
 
     .pixel-grid {
-        width: 530px;
         height: 530px;
+        width: 530px;
+    }
+
+    .sketcher-logo img {
+        content: url(./images/sketcher.png);
+        width: 270px;
     }
 }
 
 @media(max-width: 890px) {
     .pixel-grid {
-        width: 480px;
         height: 480px;
+        width: 480px;
+    }
+
+    .sketcher-logo img {
+        width: 240px;
+    }
+
+    .knob {
+        height: 90px;
+        width: 90px;
     }
 }
 
@@ -595,35 +635,77 @@ button:active::before {
         width: 430px;
         height: 430px;
     }
+
+    .sketcher-logo img {
+        width: 200px;
+    }
+
+    .knob {
+        height: 85px;
+        width: 85px;
+    }
 }
 
 @media(max-width: 755px) {
+    /* Swap to vertical layout */
+    body {
+        height: 100%;
+    }
+
+    .sketcher {
+        gap: 20px;
+    }
+
+    .panel.controls {
+        align-items: flex-start;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .panel.screen {
+        min-width: 450px;
+        gap: 20px;
+    }
+
+    .control-box {
+        min-width: 250px;
+    }
+    
     .pixel-grid {
-        width: 380px;
-        height: 380px;
+        width: 600px;
+        height: 600px;
+    }
+
+    .sketcher-logo img {
+        width: 300px;
+    }
+
+    .knob {
+        height: 100px;
+        width: 100px;
     }
 }
 
 @media(max-width: 705px) {
     .pixel-grid {
-        width: 330px;
-        height: 330px;
+        width: 580px;
+        height: 580px;
     }
 }
 
 @media(max-width: 666px) {
-    .panel.controls {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-
     .control-box {
-        min-width: 200px;
+        padding: 8px;
+        min-width: 239px;
     }
-
+    
     .pixel-grid {
         width: 530px;
         height: 530px;
+    }
+
+    .sketcher-logo img {
+        width: 250px;
     }
 
     .knob {
@@ -633,19 +715,26 @@ button:active::before {
 }
 
 @media(max-width: 600px) {
+    .sketcher {
+        padding: 0;
+        padding-bottom: 30px;
+    }
+    
+    .panel.screen {
+        gap: 0px;
+    }
+    
     .pixel-grid {
         width: 480px;
         height: 480px;
     }
 
+    .sketcher-logo img {
+        width: 200px;
+    }
 }
 
 @media(max-width: 550px) {
-    .sketcher {
-        padding: 0;
-    }
-    
-
     .pixel-grid {
         width: 430px;
         height: 430px;
@@ -653,6 +742,11 @@ button:active::before {
 }
 
 @media(max-width: 500px) {
+    .panel.controls {
+        gap: 15px;
+        padding-left: 10px;
+    }
+
     .pixel-grid {
         width: 380px;
         height: 380px;
@@ -672,6 +766,12 @@ button:active::before {
         width: 330px;
         height: 330px;
     }
+
+    .sketcher-logo img {
+        width: 120px;
+    }
+
+    
 }
 
 @media(max-width: 370px) {
@@ -681,14 +781,31 @@ button:active::before {
     }
 
     .knob {
-        height: 75px;
-        width: 75px;
+        height: 60px;
+        width: 60px;
     }
 }
 
-@media(max-width: 315px) {
+@media(max-width: 330px) {
+    .pixel-grid {
+        width: 275px;
+        height: 275px;
+    }
+}
+
+@media(max-width: 300px) {
     .pixel-grid {
         width: 250px;
         height: 250px;
+    }
+
+    .sketcher-logo img {
+        width: 90px;
+    }
+}
+
+@media(max-height: 775px) {
+    body {
+        height: 100%;
     }
 }

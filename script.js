@@ -2,7 +2,11 @@ function delay(ms) {
     return new Promise((resolution) => {setTimeout(() => resolution('done!'), ms)});
 }
 
-function makeGrid() {
+async function makeGrid() {
+    if (pixels) await clearGrid();
+    toggleInputs();
+    setWaitCursor(true);
+
     gridSize = gridSizeSlider.value;
     let pixelAmount = gridSize ** 2;
     let widthPercentage = 100 / gridSize;
@@ -22,12 +26,19 @@ function makeGrid() {
 
     pixels = document.querySelectorAll('.pixel');
     updateGridLines();
+
+    toggleInputs();
+    setWaitCursor(false);
 }
 
 async function clearGrid() {
+    clearing = true;
+    toggleInputs();
+    setWaitCursor(true);
     grid.classList.add('clearing');
+    
 
-    let pixelAmount = pixels.length;
+    let pixelAmount = gridSize ** 2;
     for (let i = 0; i < pixelAmount; i++) {
         pixels[i].style.backgroundColor = 'transparent';
         pixels[i].style.filter = '';
@@ -38,12 +49,39 @@ async function clearGrid() {
             await delay(delayTime);
         }
     }
-    await delay(1000);
+    
+    toggleInputs();
+    setWaitCursor(false);
     grid.classList.remove('clearing');
+    clearing = false;
+}
+
+function setWaitCursor(on) {
+    sketcher.style.cursor = (on) ? 'wait' : 'default';
+    clearButton.style.cursor = (on) ? 'wait' : 'pointer';
+    downloadButton.style.cursor = (on) ? 'wait' : 'pointer';
+    togglers = document.querySelectorAll('.toggler');
+    togglers.forEach((toggler) => {
+        toggler.style.cursor = (on) ? 'wait' : 'pointer';
+    })
+    gridSizeSlider.style.cursor = (on) ? 'wait' : 'default';
+}
+
+function toggleInputs() {
+    if (!rainbowMode) colorPicker.disabled = !colorPicker.disabled;
+    rainbowToggler.disabled = !rainbowToggler.disabled;
+    fillToggler.disabled = !fillToggler.disabled;
+    eraserToggler.disabled = !eraserToggler.disabled;
+    lightenToggler.disabled = !lightenToggler.disabled;
+    darkenToggler.disabled = !darkenToggler.disabled;
+    gridSizeSlider.disabled = !gridSizeSlider.disabled;
+    gridToggler.disabled = !gridToggler.disabled;
+    clearButton.disabled = !clearButton.disabled;
+    downloadButton.disabled = !downloadButton.disabled;
 }
 
 function updateGridLines() {
-    let pixelAmount =  pixels.length;
+    let pixelAmount =  gridSize ** 2;
     if (gridToggler.checked) {
         for (let i = 0; i < pixelAmount; i++) {
             pixels[i].classList.add('borders-on');
@@ -71,26 +109,30 @@ function editPixels() {
 
     ['mousedown', 'touchmove'].forEach(function(event) {
         grid.addEventListener(event, function(e) {
-            const pixel = (event === 'touchmove') ?
+            if (!clearing) {
+                const pixel = (event === 'touchmove') ?
                 document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) :
                 document.elementFromPoint(e.clientX, e.clientY);
-            if (filling) {
-                // Select {number} from id = 'px{number}'
-                const pixelNumber = pixel.id.match(/\d/g).join('');
-                const pixelColor = pixel.style.backgroundColor;
-                floodFill(pixelNumber, pixelColor);
-            } else if (lighten || darken) {
-                setPixelBrightness(pixel);
-            } else {
-                setPixelColor(pixel); 
-            }
+                if (filling) {
+                    // Select {number} from id = 'px{number}'
+                    const pixelNumber = pixel.id.match(/\d/g).join('');
+                    const pixelColor = pixel.style.backgroundColor;
+                    floodFill(pixelNumber, pixelColor);
+                } else if (lighten || darken) {
+                    setPixelBrightness(pixel);
+                } else {
+                    setPixelColor(pixel); 
+                }
+            }   
         });
     });
 
     grid.addEventListener('mouseover', function(e) {
         if (mouseIsDown && !filling) {
-            const pixel = document.elementFromPoint(e.clientX, e.clientY);
-            (lighten || darken) ? setPixelBrightness(pixel) : setPixelColor(pixel);
+            if (!clearing) {
+                const pixel = document.elementFromPoint(e.clientX, e.clientY);
+                (lighten || darken) ? setPixelBrightness(pixel) : setPixelColor(pixel);
+            }        
         } 
     });
 }
@@ -125,21 +167,25 @@ function getColor() {
 
 function floodFill(pixelID, initialColor) {
     const pixel = document.querySelector(`#px${pixelID}`);
-    const background = pixel.style.backgroundColor;
-    
     // Base case 1: Pixel out of bounds (i.e. null)
     if (!pixel) {
         return;
     }
+
+    const background = pixel.style.backgroundColor;
     // Base case 2: Pixel already filled with initial color
     if (initialColor === '' || initialColor === 'transparent') {
         if (background !== '' && background !== 'transparent') return;
-    } else {
-        if (background !== initialColor) return;
     }
+    if (background !== initialColor) return;
     
+    
+    const newColor = getColor();
+    // Base case 3: Initial color is equal to fill color
+    if (initialColor === newColor) return;
+
     // Set new pixel color
-    pixel.style.backgroundColor = getColor();
+    pixel.style.backgroundColor = newColor;
     
     // Recursively fill neighbouring pixels
     const northPixelID = pixelID - gridSize;
@@ -220,7 +266,7 @@ function download() {
     const imageContext = image.getContext('2d');
     imageContext.clearRect(0, 0, image.width, image.height);
 
-    const pixelAmount = pixels.length;
+    const pixelAmount = gridSize ** 2;
     for (let i = 0; i < pixelAmount; i++) {
         if (pixels[i].style.backgroundColor) {
             if (!pixels[i].style.filter) {
@@ -280,6 +326,7 @@ const gridSizeDisplay = document.querySelector('.grid-size-value');
 setGridSizeDisplay();
 const gridToggler = document.querySelector('#grid-switch-checkbox');
 const clearButton = document.querySelector("#clear");
+let clearing = false;
 
 // Control box 4 elements
 const downloadButton = document.querySelector('#download');
@@ -296,6 +343,7 @@ editPixels();
 rainbowToggler.addEventListener('change', () => {
     rainbowMode = !rainbowMode;
     colorPickerDisabler.style.display = (rainbowMode) ? 'block' : 'none';
+    colorPicker.disabled = (rainbowMode) ? true : false;
 });
 
 // Control box 2 event listeners
