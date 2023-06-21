@@ -102,23 +102,6 @@ body {
     padding: 12px 1px;
 }
 
-.collapsible img,
-.collapsible:hover img {
-    width: 20px;
-}
-
-.collapsible:hover {
-    background-color: var(--red-darken);
-}
-
-.collapsible:hover img {
-    content: url('./images/menu-right-filled.png');
-}
-
-.collapsible:active {
-    background-color: var(--pink1);
-}
-
 .panel.controls {
     display: flex;
     flex-direction: column;
@@ -637,6 +620,23 @@ button::before {
     
     #github:hover {
         filter: invert(56%) sepia(100%) saturate(731%) hue-rotate(8deg) brightness(103%) contrast(91%);
+    }
+
+    .collapsible img,
+    .collapsible:hover img {
+        width: 20px;
+    }
+
+    .collapsible:hover {
+        background-color: var(--red-darken);
+    }
+
+    .collapsible:hover img {
+        content: url('./images/menu-right-filled.png');
+    }
+
+    .collapsible:active {
+        background-color: var(--pink1);
     }
 }
 
