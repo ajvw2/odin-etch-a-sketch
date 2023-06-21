@@ -1,12 +1,16 @@
-async function makeGrid() {
+function delay(ms) {
+    return new Promise((resolution) => {setTimeout(() => resolution('done!'), ms)});
+}
+
+function makeGrid() {
     gridSize = gridSizeSlider.value;
     let pixelAmount = gridSize ** 2;
     let widthPercentage = 100 / gridSize;
-    let newPixels = document.createDocumentFragment();
 
     grid.style.gridTemplateColumns = `repeat(${gridSize}, ${widthPercentage}%)`;
     grid.style.gridTemplateRows = `repeat(${gridSize}, ${widthPercentage}%)`;
-    
+
+    let newPixels = document.createDocumentFragment();
     for (let i = 0; i < pixelAmount; i++) {
         let pixel = document.createElement('div');
         pixel.classList.add('pixel');
@@ -14,23 +18,16 @@ async function makeGrid() {
         pixel.setAttribute('draggable', 'false');
         newPixels.append(pixel);
     }
-
     grid.replaceChildren(newPixels);
+
     pixels = document.querySelectorAll('.pixel');
     updateGridLines();
 }
 
 async function clearGrid() {
-    // // Select random shaking animation
-    // let shakeNumber = Math.floor(Math.random() * 2) + 1;
-    // sketcher.classList.add(`shake${shakeNumber}`);
-    // // Prevent appearance of scroll bars during animation
-    // body.style.overflow = 'hidden';
-    
-
     grid.classList.add('clearing');
-    let pixelAmount = pixels.length;
 
+    let pixelAmount = pixels.length;
     for (let i = 0; i < pixelAmount; i++) {
         pixels[i].style.backgroundColor = 'transparent';
         pixels[i].style.filter = '';
@@ -43,22 +40,18 @@ async function clearGrid() {
     }
     await delay(1000);
     grid.classList.remove('clearing');
-
-    // sketcher.addEventListener('animationiteration', () => {
-    //     sketcher.classList.remove(`shake${shakeNumber}`);
-    // });
-    // await delay(1200);
-    // body.style.overflow = 'visible';
 }
 
 function updateGridLines() {
-    let pixelAmount = gridSize ** 2;
+    let pixelAmount =  pixels.length;
     if (gridToggler.checked) {
         for (let i = 0; i < pixelAmount; i++) {
             pixels[i].classList.add('borders-on');
+            // Last column border style
             if (i % gridSize === gridSize - 1) {
                 pixels[i].classList.add('on-right');
             }
+            // Last row border style
             if (i > (gridSize * (gridSize - 1)) - 1)
             {
                 pixels[i].classList.add('on-bottom');
@@ -69,7 +62,6 @@ function updateGridLines() {
             pixels[i].classList.remove('borders-on');
         } 
     }
-    
 }
 
 function editPixels() {
@@ -77,136 +69,113 @@ function editPixels() {
     window.onmousedown = () => { mouseIsDown = true; }
     window.onmouseup = () => { mouseIsDown = false; }
 
-    ['mousedown', 'touchmove'].forEach(function(e) {
-        grid.addEventListener(e, function(event) {
-            const currentPixel = (e === 'touchmove') ?
-                                document.elementFromPoint(event.touches[0].clientX, event.touches[0].clientY) :
-                                document.elementFromPoint(event.clientX, event.clientY);
-            const pixelNumber = currentPixel.id.match(/\d/g).join('');
-            
+    ['mousedown', 'touchmove'].forEach(function(event) {
+        grid.addEventListener(event, function(e) {
+            const pixel = (event === 'touchmove') ?
+                document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) :
+                document.elementFromPoint(e.clientX, e.clientY);
             if (filling) {
-                const pixelColor = currentPixel.style.backgroundColor;
+                // Select {number} from id = 'px{number}'
+                const pixelNumber = pixel.id.match(/\d/g).join('');
+                const pixelColor = pixel.style.backgroundColor;
                 floodFill(pixelNumber, pixelColor);
             } else if (lighten || darken) {
-                setPixelBrightness(currentPixel);
+                setPixelBrightness(pixel);
             } else {
-                (e === 'touchmove') ? 
-                setPixelColor(event.touches[0].clientX, event.touches[0].clientY) : 
-                setPixelColor(event.clientX, event.clientY); 
+                setPixelColor(pixel); 
             }
         });
     });
 
     grid.addEventListener('mouseover', function(e) {
         if (mouseIsDown && !filling) {
-            if (!(lighten || darken)) {
-                setPixelColor(e.clientX, e.clientY);
-            } else {
-                setPixelBrightness(document.elementFromPoint(e.clientX, e.clientY));
-            }
-            
+            const pixel = document.elementFromPoint(e.clientX, e.clientY);
+            (lighten || darken) ? setPixelBrightness(pixel) : setPixelColor(pixel);
         } 
     });
 }
 
-function setPixelColor(x, y) {
-    let currentPixel = document.elementFromPoint(x, y);
-    if (currentPixel.classList.contains('pixel')) {
-        currentPixel.style.backgroundColor = getColor();
-        if (erasing) {
-            currentPixel.style.filter = '';
-        }
-        // Animate colored pixel
-        if (!erasing) {
-            currentPixel.classList.add('got-colored');
-            currentPixel.addEventListener('animationend', () => {
-                currentPixel.classList.remove('got-colored');
-            });
-        }
+function setPixelColor(pixel) {
+    if (pixel.classList.contains('pixel')) {
+        pixel.style.backgroundColor = getColor();
+        // Reset pixel brightness and don't animate when erasing
+        (erasing) ? (pixel.style.filter = '') : animateChangedPixel(pixel);
     }
 }
 
 function getColor() {
     let r, g, b;
-    let color = colorPicker.value;
+    let color = colorPicker.value; // Hex color code
     
+    // Return color based on selected tool / coloring mode
     if (erasing) {
         return 'transparent';
     } else if (rainbowMode) {
         r = Math.floor(Math.random() * 256);
         g = Math.floor(Math.random() * 256);
-        b = Math.floor(Math.random() * 256)
+        b = Math.floor(Math.random() * 256);
     } else {
+        // Convert hex to rgb
         r = parseInt(color.substr(1,2), 16);
         g = parseInt(color.substr(3,2), 16);
         b = parseInt(color.substr(5,2), 16);
     }
-    
     return `rgb(${r}, ${g}, ${b})`;
 }
 
-function floodFill(pixelID, currentColor) {
-    pixelID = parseInt(pixelID, 10);
-
+function floodFill(pixelID, initialColor) {
     const pixel = document.querySelector(`#px${pixelID}`);
+    const background = pixel.style.backgroundColor;
     
-    // Base case: pixel = null (i.e. out of bounds)
+    // Base case 1: Pixel out of bounds (i.e. null)
     if (!pixel) {
         return;
     }
-
-    // Base case 2: pixel is already filled with color of initial pixel
-    if (currentColor === '' || currentColor === 'transparent') {
-        if (
-            (pixel.style.backgroundColor !== '') && 
-            (pixel.style.backgroundColor !== 'transparent')
-            ) {
-            return;
-        }
+    // Base case 2: Pixel already filled with initial color
+    if (initialColor === '' || initialColor === 'transparent') {
+        if (background !== '' && background !== 'transparent') return;
     } else {
-        if ((pixel.style.backgroundColor !== currentColor)) {
-            return;
-        }
+        if (background !== initialColor) return;
     }
     
-    // Set new color
+    // Set new pixel color
     pixel.style.backgroundColor = getColor();
     
-    // FILL NEIGHBORS
-    // Top
+    // Recursively fill neighbouring pixels
     const northPixelID = pixelID - gridSize;
-    floodFill(northPixelID, currentColor);
-    // Bottom
-    const southPixelID = pixelID + +gridSize;
-    floodFill(southPixelID, currentColor);
-    // Left
+    const southPixelID = +pixelID + +gridSize;
     const westPixelID = pixelID - 1;
-    if (!(pixelID % gridSize === 0)) {
-        floodFill(westPixelID, currentColor);
-    }
-    // Right
-    const eastPixelID = pixelID + 1;
-    if (!(eastPixelID % gridSize === 0)) {
-        floodFill(eastPixelID, currentColor);
-    }
-    return;
+    const westOnPreviousRow = pixelID % gridSize === 0;
+    const eastPixelID = +pixelID + 1;
+    const eastOnNextRow = eastPixelID % gridSize === 0;
+
+    floodFill(northPixelID, initialColor);
+    floodFill(southPixelID, initialColor);
+    if (!westOnPreviousRow) floodFill(westPixelID, initialColor);
+    if (!eastOnNextRow) floodFill(eastPixelID, initialColor);
 }
 
 function setPixelBrightness(pixel) {
-    if (pixel.style.backgroundColor === '' || pixel.style.backgroundColor === 'transparent') {
-        return;
-    }
-    if (!pixel.style.filter || pixel.style.filter === '') {
+    const background = pixel.style.backgroundColor;
+    // Don't set brightness on empty pixels
+    if (background === '' || background === 'transparent') return;
+
+    const currentFilter = pixel.style.filter;
+    if (!currentFilter || currentFilter === '') {
+        // Initiate brightness setting based on lighten or darken mode
         pixel.style.filter = lighten ? 'brightness(110%)' : 'brightness(90%)';
     } else {
         const currentBrightness = pixel.style.filter.match(/\d/g).join('');
         let newBrightness = lighten ? (+currentBrightness + 10) : (currentBrightness - 10);
-        // Allow for a max 100% increase and 100% decrease
+        // Allow for a maximum 100% increase and 100% decrease
         if (newBrightness <= 200 || newBrightness >= 0) {
             pixel.style.filter = `brightness(${newBrightness}%)`;
         }
     }
+    animateChangedPixel(pixel);
+}
 
+function animateChangedPixel(pixel) {
     pixel.classList.add('got-colored');
     pixel.addEventListener('animationend', () => {
         pixel.classList.remove('got-colored');
@@ -214,43 +183,55 @@ function setPixelBrightness(pixel) {
 }
 
 function turnOffOtherTools(currentTool) {
-    if (currentTool != 'fill') {
+    if (currentTool !== 'filling') {
         filling = false;
         fillToggler.checked = false;
     }
-    if (currentTool != 'eraser') {
+    if (currentTool !== 'erasing') {
         erasing = false;
         eraserToggler.checked = false;
     }
-    if (currentTool != 'lighten') {
+    if (currentTool !== 'lighten') {
         lighten = false;
         lightenToggler.checked = false;
     }
-    if (currentTool != 'darken') {
+    if (currentTool !== 'darken') {
         darken = false;
         darkenToggler.checked = false;
     }
 }
 
-function delay(ms) {
-    return new Promise((resolution) => {setTimeout(() => resolution('done!'), ms)});
+function setGridSizeDisplay() {
+    // Update position of the grid size number that sits on top
+    // of the slider thumb
+    let selectedGridSize = gridSizeSlider.value;
+    let sliderWidth = gridSizeSlider.offsetWidth - 38;
+    let widthPercentage = sliderWidth / 60;
+
+    gridSizeDisplay.style.left = (`${selectedGridSize * widthPercentage + 4}px`);
+    gridSizeDisplay.textContent = selectedGridSize;
 }
 
 function download() {
-    const pixelAmount = gridSize ** 2;
+    // Create PNG image of (gridSize*gridSize) pixels using canvas element
     const image = document.createElement('canvas');
     image.height = gridSize;
     image.width = gridSize;
     const imageContext = image.getContext('2d');
     imageContext.clearRect(0, 0, image.width, image.height);
 
+    const pixelAmount = pixels.length;
     for (let i = 0; i < pixelAmount; i++) {
         if (pixels[i].style.backgroundColor) {
             if (!pixels[i].style.filter) {
+                // Without brightness setting, set fill style to RGB
+                // background color of current pixel
                 imageContext.fillStyle = pixels[i].style.backgroundColor;
             }
             else {
-                let rgbSplit = pixels[i].style.backgroundColor.split(',');
+                // Calculate corresponding RGB value for pixels with brightness 
+                // setting before setting fill style
+                const rgbSplit = pixels[i].style.backgroundColor.split(',');
                 let rgb = new Array();
                 rgbSplit.forEach((value) => {
                     rgb.push(value.match(/\d/g).join(''));
@@ -261,26 +242,15 @@ function download() {
                 
                 imageContext.fillStyle = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
             }
-            
+            // Fill corresponding pixel point on canvas
             imageContext.fillRect(i % gridSize, Math.floor(i / gridSize), 1, 1);
         }
     }
 
-    const imageDataURL = image.toDataURL("image/png");
-
     const link = document.createElement('a');
-    link.href = imageDataURL;
+    link.href = image.toDataURL("image/png");
     link.download = 'sketch.png';
     link.click();
-}
-
-function setGridSizeDisplay() {
-    let selectedGridSize = gridSizeSlider.value;
-    let sliderWidth = gridSizeSlider.offsetWidth - 38;
-    let widthPercentage = sliderWidth / 60;
-
-    gridSizeDisplay.style.left = (`${selectedGridSize * widthPercentage + 4}px`);
-    gridSizeDisplay.textContent = selectedGridSize;
 }
 
 // Main elements
@@ -288,23 +258,21 @@ const body = document.querySelector('body');
 const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
 
-
 // Control box 1 elements
-const rainbowToggler = document.querySelector('#rainbow-switch-checkbox');
-let rainbowMode = false;
 const colorPicker = document.querySelector('#colorpicker');
 const colorPickerDisabler = document.querySelector('.colorpicker-disabler');
+const rainbowToggler = document.querySelector('#rainbow-switch-checkbox');
+let rainbowMode = false;
 
 // Control box 2 elements
 const fillToggler = document.querySelector('#fill-switch-checkbox');
-let filling = false;
 const eraserToggler = document.querySelector('#eraser-switch-checkbox');
-let erasing = false;
 const lightenToggler = document.querySelector('#lighten-switch-checkbox');
-let lighten = false;
 const darkenToggler = document.querySelector('#darken-switch-checkbox');
+let filling = false;
+let erasing = false;
+let lighten = false;
 let darken = false;
-
 
 // Control box 3 elements
 const gridSizeSlider = document.querySelector('#grid-size-slider');
@@ -316,34 +284,29 @@ const clearButton = document.querySelector("#clear");
 // Control box 4 elements
 const downloadButton = document.querySelector('#download');
 
-// Get initial grid size from slider and make the grid
+// Global variables for grid size and pixel node list
 let gridSize;
 let pixels;
-makeGrid();
 
-// Listen for drawing events
+// Create grid and listen for drawing events
+makeGrid();
 editPixels();
 
 // Control box 1 event listeners
 rainbowToggler.addEventListener('change', () => {
     rainbowMode = !rainbowMode;
-    if (rainbowMode) {
-        colorPickerDisabler.style.display = 'block';
-    } else {
-        colorPickerDisabler.style.display = 'none';
-    }
+    colorPickerDisabler.style.display = (rainbowMode) ? 'block' : 'none';
 });
 
 // Control box 2 event listeners
 fillToggler.addEventListener('change', () => {
     filling = !filling;
-    if (filling) turnOffOtherTools('fill');
-
+    if (filling) turnOffOtherTools('filling');
 });
 
 eraserToggler.addEventListener('change', () => {
     erasing = !erasing;
-    if (erasing) turnOffOtherTools('eraser');
+    if (erasing) turnOffOtherTools('erasing');
 });
 
 lightenToggler.addEventListener('change', () => {
@@ -357,10 +320,7 @@ darkenToggler.addEventListener('change', () => {
 })
 
 // Control box 3 event listeners
-gridSizeSlider.addEventListener('change', () => {
-    console.log('Changed!');
-    makeGrid();
-});
+gridSizeSlider.addEventListener('change', makeGrid);
 gridSizeSlider.addEventListener('input', setGridSizeDisplay);
 gridToggler.addEventListener('change', updateGridLines);
 clearButton.addEventListener('click', clearGrid);
