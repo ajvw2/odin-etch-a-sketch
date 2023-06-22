@@ -299,12 +299,93 @@ function download() {
     link.click();
 }
 
+function collapseButtonUpdater() {
+    if (windowWidth > 755) {
+        menuCollapseButton.addEventListener('mouseover', () => {
+            menuCollapseArrow.style.content = 
+                (displayingMenu) ? 
+                'url(./images/menu-left-filled.png)' : 
+                'url(./images/menu-right-filled.png)'; 
+        });
+        
+        menuCollapseButton.addEventListener('mouseout', () => {
+            menuCollapseArrow.style.content = 
+                (displayingMenu) ? 
+                'url(./images/menu-left-open.png)' : 
+                'url(./images/menu-right-open.png)'; 
+        });
+    } else {
+        menuCollapseButton.addEventListener('mouseover', () => {
+            menuCollapseArrow.style.content = 
+                (displayingMenu) ? 
+                'url(./images/menu-up-filled.png)' : 
+                'url(./images/menu-down-filled.png)'; 
+        });
+        
+        menuCollapseButton.addEventListener('mouseout', () => {
+            menuCollapseArrow.style.content = 
+                (displayingMenu) ? 
+                'url(./images/menu-up-open.png)' : 
+                'url(./images/menu-down-open.png)'; 
+        });
+    }
+}
+
+function setSketcherDimensions() {
+    // TODO: Clean up this code at a later stage. This feels very messy 
+    // (but somehow works).
+    if (windowWidth > 755) {
+        if (windowWidth >= 1300) {
+            sketcherWrapper.style.maxWidth = 
+                (displayingMenu) ? 
+                '1300px' : 
+                '1050px';
+        } else {
+            sketcherWrapper.style.maxWidth = 
+                (displayingMenu) ? 
+                `${windowWidth}px` : 
+                `${windowWidth - 250}px`;
+        }
+        controlPanel.style.maxHeight = '733px';
+        // There must be a better way. Just setting 'width' breaks things, however.
+        controlPanel.style.minWidth = (displayingMenu) ? '250px' : '0px';
+        controlPanel.style.maxWidth = (displayingMenu) ? '250px' : '0px';
+        menuCollapseButton.style.flex = 0;
+        // Initializes arrow images
+        menuCollapseArrow.style.content = 
+            (displayingMenu) ? 
+            'url(./images/menu-left-open.png)' : 
+            'url(./images/menu-right-open.png)'; 
+    } else {
+        sketcherWrapper.style.maxWidth = windowWidth;
+        controlPanel.style.minWidth = '250px';
+        controlPanel.style.maxWidth = '550px';
+        if (windowWidth > 500) {
+            controlPanel.style.minHeight = (displayingMenu) ? '413px' : '0px';
+        } else {
+            controlPanel.style.minHeight = (displayingMenu) ? '750px' : '0px';
+        }
+        controlPanel.style.maxHeight = (displayingMenu) ? null : '0px';
+        // These 4 menuCollapseButton styles feel nastily overcomplicated,
+        // but it works...
+        menuCollapseButton.style.maxWidth = windowWidth;
+        menuCollapseButton.style.minWidth = windowWidth;
+        menuCollapseButton.style.flex = 1;
+        menuCollapseButton.style.flexBasis = '100%';
+        // Initializes arrow images
+        menuCollapseArrow.style.content = 
+            (displayingMenu) ? 
+            'url(./images/menu-up-open.png)' : 
+            'url(./images/menu-down-open.png)'; 
+    }
+}
+
 // Main elements
 const body = document.querySelector('body');
 const sketcherWrapper = document.querySelector('.sketcher-wrapper');
 const sketcher = document.querySelector('.sketcher');
 const grid = document.querySelector('.pixel-grid');
-const menuCollapseButton = document.querySelector('.collapsible');
+const menuCollapseButton = document.querySelector('.collapser');
 let displayingMenu = false;
 const menuCollapseArrow = document.querySelector('#menu-collapse-arrow');
 const controlPanel = document.querySelector('.controls');
@@ -346,74 +427,19 @@ editPixels();
 
 // Window resize event listener
 let windowWidth = document.body.clientWidth;
-setSketcherWidth();
+setSketcherDimensions();
 window.addEventListener('resize', () => {
     windowWidth = document.body.clientWidth;
-    setSketcherWidth();
+    setSketcherDimensions();
     collapseButtonUpdater();
 });
 
-function setSketcherWidth() {
-    if (windowWidth >= 1300) {
-        controlPanel.style.maxHeight = '733px';
-        sketcherWrapper.style.maxWidth = (displayingMenu) ? '1300px' : '1050px';
-        menuCollapseButton.style.flex = 0;
-        menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-open.png)' : 'url(./images/menu-right-open.png)'; 
-        controlPanel.style.maxWidth = (displayingMenu) ? '250px' : '0px';
-        controlPanel.style.minWidth = (displayingMenu) ? '250px' : '0px';
-    } else if (windowWidth > 755) {
-        controlPanel.style.maxHeight = '733px';
-        sketcherWrapper.style.maxWidth = (displayingMenu) ? `${windowWidth}px` : `${windowWidth - 250}px`;
-        menuCollapseButton.style.flex = 0;
-        menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-open.png)' : 'url(./images/menu-right-open.png)'; 
-        controlPanel.style.maxWidth = (displayingMenu) ? '250px' : '0px';
-        controlPanel.style.minWidth = (displayingMenu) ? '250px' : '0px';
-    } else {
-        controlPanel.style.minWidth = '250px';
-        controlPanel.style.maxWidth = '550px';
-        if (windowWidth > 500) {
-            controlPanel.style.minHeight = (displayingMenu) ? '413px' : '0px';
-        } else {
-            controlPanel.style.minHeight = (displayingMenu) ? '750px' : '0px';
-        }
-        controlPanel.style.maxHeight = (displayingMenu) ? null : '0px';
-        sketcherWrapper.style.maxWidth = windowWidth;
-        menuCollapseButton.style.maxWidth = windowWidth;
-        menuCollapseButton.style.minWidth = windowWidth;
-        menuCollapseButton.style.flex = 1;
-        menuCollapseButton.style.flexBasis = '100%';
-        menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-up-open.png)' : 'url(./images/menu-down-open.png)'; 
-    }
-}
-
-// Collapse event listener
+// Menu collapse event listener
 menuCollapseButton.addEventListener('click', () => {
     displayingMenu = !displayingMenu;
-    setSketcherWidth();
+    setSketcherDimensions();
     collapseButtonUpdater();
 });
-
-
-function collapseButtonUpdater() {
-    if (windowWidth > 755) {
-        menuCollapseButton.addEventListener('mouseover', () => {
-            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-filled.png)' : 'url(./images/menu-right-filled.png)' ; 
-        });
-        
-        menuCollapseButton.addEventListener('mouseout', () => {
-            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-left-open.png)' : 'url(./images/menu-right-open.png)' ; 
-        });
-    } else {
-        menuCollapseButton.addEventListener('mouseover', () => {
-            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-up-filled.png)' : 'url(./images/menu-down-filled.png)' ; 
-        });
-        
-        menuCollapseButton.addEventListener('mouseout', () => {
-            menuCollapseArrow.style.content = (displayingMenu) ? 'url(./images/menu-up-open.png)' : 'url(./images/menu-down-open.png)' ; 
-        });
-    }
-}
-
 
 // Control box 1 event listeners
 rainbowToggler.addEventListener('change', () => {

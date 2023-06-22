@@ -68,7 +68,7 @@ body {
     display: flex;
     justify-content: center;
     flex: 1;
-    transition: max-width 0.3s ease-out, translateX 0.3s ease-out;
+    transition: all 0.3s ease-out;
 }
 
 .sketcher {
@@ -94,7 +94,7 @@ body {
     flex: 1;
 }
 
-.collapsible {
+.collapser {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,20 +102,16 @@ body {
     padding: 12px 1px;
 }
 
-.collapsible img,
-.collapsible:hover img {
+.collapser img,
+.collapser:hover img {
     width: 20px;
 }
 
-.collapsible:hover {
+.collapser:hover {
     background-color: var(--red-darken);
 }
 
-.collapsible:hover img {
-    content: url('./images/menu-right-filled.png');
-}
-
-.collapsible:active {
+.collapser:active {
     background-color: var(--pink1);
 }
 
@@ -268,8 +264,6 @@ img {
     border: 2px solid var(--brown);
     border-radius: 10px;
     background-color: var(--off-white);
-    
-    transition: all 0.3s ease;
 }
 
 .slider::-webkit-slider-thumb {
@@ -726,7 +720,7 @@ button::before {
         flex-wrap: wrap;
     }
 
-    .collapsible {
+    .collapser {
         padding: 1px 12px;
     }
 
